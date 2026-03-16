@@ -1,0 +1,126 @@
+# proto-file: p4/config/v1/p4info.proto
+# proto-message: p4.config.v1.P4Info
+
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 38687552
+    name: "MyIngress.forwarding"
+    alias: "forwarding"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ethernet.dstAddr"
+    bitwidth: 48
+    match_type: EXACT
+  }
+  action_refs {
+    id: 27787745
+  }
+  action_refs {
+    id: 31763006
+  }
+  size: 1024
+  idle_timeout_behavior: NOTIFY_CONTROL
+}
+tables {
+  preamble {
+    id: 49751604
+    name: "MyIngress.route_alteration"
+    alias: "route_alteration"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ipv4.srcAddr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 2
+    name: "hdr.ipv4.dstAddr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 3
+    name: "hdr.ipv4.protocol"
+    bitwidth: 8
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 4
+    name: "meta.l4_src"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 5
+    name: "meta.l4_dst"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  action_refs {
+    id: 30120457
+  }
+  action_refs {
+    id: 21257015
+    annotations: "@defaultonly"
+    scope: DEFAULT_ONLY
+  }
+  size: 1024
+}
+actions {
+  preamble {
+    id: 21257015
+    name: "NoAction"
+    alias: "NoAction"
+    annotations: "@noWarn(\"unused\")"
+  }
+}
+actions {
+  preamble {
+    id: 27787745
+    name: "MyIngress.set_egress_port"
+    alias: "set_egress_port"
+  }
+  params {
+    id: 1
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 31763006
+    name: "MyIngress.flood"
+    alias: "flood"
+  }
+}
+actions {
+  preamble {
+    id: 32760417
+    name: "MyIngress.send_to_controller"
+    alias: "send_to_controller"
+  }
+}
+actions {
+  preamble {
+    id: 30120457
+    name: "MyIngress.set_route_override"
+    alias: "set_route_override"
+  }
+  params {
+    id: 1
+    name: "next_hop"
+    bitwidth: 48
+  }
+  params {
+    id: 2
+    name: "port"
+    bitwidth: 9
+  }
+}
+type_info {
+}
