@@ -4,19 +4,19 @@ Course project for CS6204: Advanced Topics in Networking.
 
 ## Overview
 
-This project contains a Mininet + FRR + P4 experiment for BGP reconvergence.
+This project contains a Mininet + FRR + P4 experiment for BGP reconvergence and SDX fast recovery.
 
-Current experiment goal:
+Current experiment goals:
 
-- normal path:
+- steady-state forwarding:
   - `AS1 -> AS2 -> AS4`
-  - `AS4 -> AS2 -> AS1`
-- after `AS2` loses its uplink to the shared exchange switch:
-  - BGP withdraws the old path
-  - BGP relearns through `AS3`
-  - traffic converges to:
-    - `AS1 -> AS3 -> AS4`
-    - `AS4 -> AS3 -> AS1`
+  - `AS4 -> AS3 -> AS1`
+- BGP-only recovery:
+  - when `AS2` loses its uplink to the shared exchange switch, BGP withdraws the old path and converges to `AS1 -> AS3 -> AS4`
+- SDX fast recovery:
+  - when the `AS2` failure event is triggered in the experiment, the controller immediately installs a redirect rule on the switch
+  - packets from `AS1` that were headed to `AS2` are immediately redirected to `AS3`
+  - BGP later converges to the same final path, so SDX recovery does not replace BGP convergence
 
 ## Topology
 
@@ -25,14 +25,29 @@ Current experiment goal:
   - `as2r1` via `10.0.1.0/24`
   - `as3r1` via `10.0.2.0/24`
 - the `AS2-AS4` link is configured faster than the `AS3-AS4` link
-- BGP policy prefers `AS2` in the steady state
+- BGP policy prefers `AS2` for `AS1 -> AS4`
+- BGP policy prefers `AS3` for `AS4 -> AS1`
 
 ## Run
 
 From [base](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base):
 
+`BGP-only`:
+
 ```bash
 make run-convergence-1
+```
+
+`SDX fast recovery`:
+
+```bash
+make run-sdx-convergence-1
+```
+
+`Run both and generate a comparison`:
+
+```bash
+make run-compare-1
 ```
 
 ## Output
@@ -41,12 +56,17 @@ Successful runs save metrics to:
 
 - [bgp_convergence.log](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.log)
 - [bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.json)
+- [sdx_convergence.log](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.log)
+- [sdx_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.json)
+- [recovery_comparison.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/recovery_comparison.md)
+- [recovery_comparison.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/recovery_comparison.json)
 
 Recorded metrics include:
 
 - detection time
 - blackout duration
-- total convergence time
+- traffic recovery time
+- BGP sync time
 - packet loss count
 - first response RTT after recovery
 
@@ -54,4 +74,5 @@ Recorded metrics include:
 
 - failure injection is performed by shutting down `as2r1-eth1`
 - the P4 controller preinstalls static forwarding entries for router MAC addresses on the shared switch
+- the SDX fast recovery rule rewrites packets from `AS1` that would have gone to `AS2`, and forwards them to the `AS3` switch port instead
 - detailed failure analysis is documented in [BGP_RECOVERY_REPORT.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/BGP_RECOVERY_REPORT.md)

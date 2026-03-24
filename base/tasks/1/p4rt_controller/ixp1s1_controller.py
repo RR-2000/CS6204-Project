@@ -23,16 +23,28 @@ BUILD_DIRECTORY = os.path.join(
     REPOSITORY_DIRECTORY,
     "build/p4"
 )
+TEMP_DIRECTORY = os.path.join(
+    REPOSITORY_DIRECTORY,
+    "temp"
+)
 
 CPU_PORT = 510
 CPU_SESSION = 64
 NUM_PORTS = 32
 MAC_ENTRY_IDLE_TIMEOUT_NS = 300_000_000_000  # 300 seconds
+ENABLE_SDX_FAST_FAILOVER = os.environ.get("ENABLE_SDX_FAST_FAILOVER", "0") == "1"
+FAST_FAILOVER_SIGNAL_FILE = os.path.join(TEMP_DIRECTORY, "sdx_fast_failover.signal")
+SIGNAL_POLL_INTERVAL_SEC = 0.1
 STATIC_ROUTER_MACS = {
     "f0:00:0a:01:01:01": 1,
     "f0:00:0a:01:02:01": 2,
     "f0:00:0a:01:03:01": 3,
 }
+AS1_PORT = 1
+AS2_PORT = 2
+AS3_PORT = 3
+AS2_ROUTER_MAC = "f0:00:0a:01:02:01"
+AS3_ROUTER_MAC = "f0:00:0a:01:03:01"
 
 logger = finsy.LoggerAdapter(
     logging.getLogger("finsy")
@@ -43,6 +55,7 @@ def _format_mac(mac_bytes: bytes) -> str:
 
 # MAC learning table to track learned MAC addresses (Just a Local Copy for this controller)
 mac_table: Dict[Tuple[str, str], int] = {}  # (switch_name, mac_addr) -> port
+fast_failover_installed: Dict[str, bool] = {}
 
 def _make_forward_entry(mac_addr: str, port: int) -> finsy.P4TableEntry:
     return finsy.P4TableEntry(
@@ -70,6 +83,21 @@ def _make_static_forward_entry(mac_addr: str, port: int) -> finsy.P4TableEntry:
         ),
     )
 
+
+def _make_fast_failover_entry() -> finsy.P4TableEntry:
+    return finsy.P4TableEntry(
+        "MyIngress.fast_failover",
+        match=finsy.Match({
+            "meta.ingress_port": AS1_PORT,
+            "hdr.ethernet.dstAddr": AS2_ROUTER_MAC,
+        }),
+        action=finsy.Action(
+            "MyIngress.set_route_override",
+            next_hop=AS3_ROUTER_MAC,
+            port=AS3_PORT,
+        ),
+    )
+
 async def controller_ready_handler(
     switch: finsy.Switch
 ):
@@ -79,6 +107,7 @@ async def controller_ready_handler(
     keys_to_remove = [key for key in mac_table if key[0] == switch.name]
     for key in keys_to_remove:
         mac_table.pop(key, None)
+    fast_failover_installed[switch.name] = False
     
     # Set up multicast group for flooding to all 4 ports
     multicast_group = +finsy.P4MulticastGroupEntry(
@@ -120,6 +149,8 @@ async def controller_ready_handler(
     
     # Start idle timeout listener
     switch.create_task(handle_idle_timeouts(switch), name=f"{switch.name}-idle-timeout")
+    if ENABLE_SDX_FAST_FAILOVER:
+        switch.create_task(monitor_fast_failover_signal(switch), name=f"{switch.name}-fast-failover")
     
     logger.info(f"Switch {switch.name} ready with multicast group configured")
 
@@ -243,6 +274,41 @@ def on_port_down(switch: finsy.Switch, port: finsy.SwitchPort):
     switch.create_task(_clear_mac_entries_for_port(switch, port.id))
 
 
+async def _set_fast_failover_state(switch: finsy.Switch, enabled: bool):
+    installed = fast_failover_installed.get(switch.name, False)
+    if enabled == installed:
+        return
+
+    entry = _make_fast_failover_entry()
+    if enabled:
+        await switch.write([+entry])
+        fast_failover_installed[switch.name] = True
+        logger.info(
+            "Installed SDX fast failover: ingress port %d, dst MAC %s -> port %d, dst MAC %s",
+            AS1_PORT,
+            AS2_ROUTER_MAC,
+            AS3_PORT,
+            AS3_ROUTER_MAC,
+        )
+    else:
+        await switch.write([-entry])
+        fast_failover_installed[switch.name] = False
+        logger.info("Removed SDX fast failover override")
+
+
+async def monitor_fast_failover_signal(switch: finsy.Switch):
+    logger.info("Starting SDX fast failover signal monitor for %s", switch.name)
+    try:
+        while True:
+            enabled = os.path.exists(FAST_FAILOVER_SIGNAL_FILE)
+            await _set_fast_failover_state(switch, enabled)
+            await asyncio.sleep(SIGNAL_POLL_INTERVAL_SEC)
+    except asyncio.CancelledError:
+        pass
+    except Exception as exc:
+        logger.error("SDX fast failover signal monitor failed: %s", exc)
+
+
 async def main():
     info_file_path = pathlib.Path(
         os.path.join(
@@ -275,6 +341,7 @@ async def main():
     logger.info("Starting MAC learning controller for ixp1s1")
     logger.info("Switch supports 4 ports (1-4) with 1024 MAC addresses")
     logger.info("MAC aging timeout: 300 seconds")
+    logger.info("SDX fast failover enabled: %s", ENABLE_SDX_FAST_FAILOVER)
     
     await controller.run()
 

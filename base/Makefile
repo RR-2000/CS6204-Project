@@ -45,6 +45,8 @@ IXP1S1_CONTROLLER_PID_FILE = $(IXP1S1_CONTROLLER_TEMP_DIR)/ixp1s1_controller.pid
 	run-task-1 \
 	run-checks-1 \
 	run-convergence-1 \
+	run-sdx-convergence-1 \
+	run-compare-1 \
 	run-stop \
 	run-clean \
 	clean \
@@ -94,8 +96,23 @@ run-convergence-1:
 	$(MAKE) build-task-1
 	$(MAKE) run-init
 	mkdir -p $(IXP1S1_CONTROLLER_TEMP_DIR)
-	$(PYTHON_INTERPRETER) $(TASKS_DIR)/1/$(IXP1S1_CONTROLLER_SCRIPT_FILE) > $(IXP1S1_CONTROLLER_LOG_FILE) 2>&1 & echo $$! > $(IXP1S1_CONTROLLER_PID_FILE)
-	sudo $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CONVERGENCE_NETWORK_FILE)
+	ENABLE_SDX_FAST_FAILOVER=0 $(PYTHON_INTERPRETER) $(TASKS_DIR)/1/$(IXP1S1_CONTROLLER_SCRIPT_FILE) > $(IXP1S1_CONTROLLER_LOG_FILE) 2>&1 & echo $$! > $(IXP1S1_CONTROLLER_PID_FILE)
+	sudo RECOVERY_MODE=bgp $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CONVERGENCE_NETWORK_FILE)
+	$(MAKE) run-stop
+
+run-sdx-convergence-1:
+	$(MAKE) run-clean
+	$(MAKE) build-task-1
+	$(MAKE) run-init
+	mkdir -p $(IXP1S1_CONTROLLER_TEMP_DIR)
+	ENABLE_SDX_FAST_FAILOVER=1 $(PYTHON_INTERPRETER) $(TASKS_DIR)/1/$(IXP1S1_CONTROLLER_SCRIPT_FILE) > $(IXP1S1_CONTROLLER_LOG_FILE) 2>&1 & echo $$! > $(IXP1S1_CONTROLLER_PID_FILE)
+	sudo RECOVERY_MODE=sdx $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CONVERGENCE_NETWORK_FILE)
+	$(MAKE) run-stop
+
+run-compare-1:
+	$(MAKE) run-convergence-1
+	$(MAKE) run-sdx-convergence-1
+	$(PYTHON_INTERPRETER) compare_recovery_results.py
 	$(MAKE) run-stop
 
 run-stop:

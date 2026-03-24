@@ -1,20 +1,29 @@
-# BGP Recovery Report
+# Recovery Report
 
 ## Goal
 
-This experiment measures pure BGP reconvergence after the link between `AS2` and the shared exchange switch fails.
+This experiment evaluates two recovery methods after the link between `AS2` and the shared exchange switch fails:
+
+- pure BGP reconvergence
+- SDX fast recovery followed by normal BGP convergence
 
 Expected behavior:
 
 - Normal forwarding:
   - `AS1 -> AS2 -> AS4`
-  - `AS4 -> AS2 -> AS1`
+  - `AS4 -> AS3 -> AS1`
 - After failure of the `AS2` uplink to the exchange:
   - BGP withdraws the path through `AS2`
   - BGP relearns the path through `AS3`
   - Traffic converges to:
     - `AS1 -> AS3 -> AS4`
     - `AS4 -> AS3 -> AS1`
+
+In SDX fast recovery mode:
+
+- the experiment triggers an immediate SDX failover event when the `AS2` uplink is taken down
+- packets from `AS1` that were previously sent to `AS2` are redirected to `AS3`
+- BGP still converges in the background
 
 ## Topology Summary
 
@@ -90,6 +99,29 @@ The controller now preinstalls static forwarding rules for:
 
 This prevents BGP control-plane traffic from depending on transient MAC learning behavior.
 
+### 3. Add an SDX fast failover rule
+
+The P4 program now contains a dedicated fast failover table that matches:
+
+- ingress port from `AS1`
+- destination MAC of `AS2`
+
+and rewrites the packet to:
+
+- destination MAC of `AS3`
+- egress port of `AS3`
+
+This gives immediate data-plane recovery for traffic from `AS1` toward `AS4` when `AS2` becomes unavailable on the exchange.
+
+### 4. Keep BGP and SDX recovery separate
+
+The SDX rule only accelerates forwarding. It does not replace the control-plane decision process.
+
+Final steady state is still produced by BGP:
+
+- `AS1` eventually selects `AS3`
+- `AS4` is already configured to prefer `AS3` for return traffic
+
 ## Result
 
 With the fixes applied:
@@ -101,7 +133,7 @@ With the fixes applied:
   - [bgp_convergence.log](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.log)
   - [bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.json)
 
-Example measured result from the latest successful run:
+Example measured result from the latest successful BGP-only run:
 
 - Detection time: `1.02 s`
 - Blackout duration: `8.16 s`
@@ -111,4 +143,15 @@ Example measured result from the latest successful run:
 
 ## Evaluation Notes
 
-For grading or repeated evaluation, use the JSON file because it is easier to parse programmatically. The plain-text log is suitable for manual inspection.
+For grading or repeated evaluation:
+
+- use `make run-convergence-1` for BGP-only recovery
+- use `make run-sdx-convergence-1` for SDX fast recovery
+- use `make run-compare-1` to generate a side-by-side comparison
+
+Structured output files:
+
+- [bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.json)
+- [sdx_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.json)
+- [recovery_comparison.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/recovery_comparison.json)
+- [recovery_comparison.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/recovery_comparison.md)

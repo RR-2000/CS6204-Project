@@ -1,0 +1,14 @@
+SDX_FAST Recovery Test
+========================================
+Test time: 2026-03-24 19:09:09
+Mode:      SDX_FAST
+Ping:      as1h1 -> 10.4.0.101
+
+Result: SUCCESS
+Link failed:          as2r1-eth1 administratively down
+Detection time:       1.04s
+Blackout duration:    0.14s
+Convergence time:     1.18s
+BGP sync time:        1.18s
+Packet loss count:    1
+First response RTT:   81.758 ms
