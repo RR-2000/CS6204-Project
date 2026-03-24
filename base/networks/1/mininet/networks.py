@@ -23,16 +23,12 @@ FRR_CONFIGURATION_DIRECTORY = os.path.join(
     SCRIPT_DIRECTORY,
     "../frr/"
 )
-BIRD_CONFIGURATION_DIRECTORY = os.path.join(
-    TASKS_SOURCE_DIRECTORY,
-    "bird"
-)
 
 sys.path.append(REPOSITORY_DIRECTORY)
 
 # pylint: disable=E0401,C0413
 from common.p4.functions import HelperFunctions
-from common.mininet.nodes import Client, P4Switch, FRRRouter, BIRDRouter
+from common.mininet.nodes import Client, P4Switch, FRRRouter
 
 class Topology(Topo):
     def build(
@@ -81,14 +77,6 @@ class Topology(Topo):
             grpc_port=50001,
         )
 
-        # SDX route server
-        ixp1s1_bird = self.addNode(
-            "ixp1s1_bird",
-            cls=BIRDRouter,
-            configFile=os.path.join(BIRD_CONFIGURATION_DIRECTORY, "ixp1s1_bird.conf"),
-            toEnableIpv4Forwarding=False,
-        )
-
         as1r1 = self.addNode(
             "as1r1",
             cls=FRRRouter,
@@ -96,7 +84,11 @@ class Topology(Topo):
             bgpConfigFile=os.path.join(FRR_CONFIGURATION_DIRECTORY, "as1r1-bgp.conf"),
             configCmds=(
                 HelperFunctions.generate_set_interface_mac_commands(hosts_mac_addresses["as1r1"]) +
-                [HelperFunctions.generate_add_loopback_interface_ip_command("10.100.1.1/32")]
+                [
+                    HelperFunctions.generate_add_loopback_interface_ip_command("10.100.1.1/32"),
+                    HelperFunctions.generate_set_static_arp_command("10.0.0.2", hosts_mac_addresses["as2r1"]["as2r1-eth1"]),
+                    HelperFunctions.generate_set_static_arp_command("10.0.0.3", hosts_mac_addresses["as3r1"]["as3r1-eth1"]),
+                ]
             ),
         )
         as2r1 = self.addNode(
@@ -106,7 +98,10 @@ class Topology(Topo):
             bgpConfigFile=os.path.join(FRR_CONFIGURATION_DIRECTORY, "as2r1-bgp.conf"),
             configCmds=(
                 HelperFunctions.generate_set_interface_mac_commands(hosts_mac_addresses["as2r1"]) +
-                [HelperFunctions.generate_add_loopback_interface_ip_command("10.100.2.1/32")]
+                [
+                    HelperFunctions.generate_add_loopback_interface_ip_command("10.100.2.1/32"),
+                    HelperFunctions.generate_set_static_arp_command("10.0.0.1", hosts_mac_addresses["as1r1"]["as1r1-eth1"]),
+                ]
             ),
         )
         as3r1 = self.addNode(
@@ -116,7 +111,10 @@ class Topology(Topo):
             bgpConfigFile=os.path.join(FRR_CONFIGURATION_DIRECTORY, "as3r1-bgp.conf"),
             configCmds=(
                 HelperFunctions.generate_set_interface_mac_commands(hosts_mac_addresses["as3r1"]) +
-                [HelperFunctions.generate_add_loopback_interface_ip_command("10.100.3.1/32")]
+                [
+                    HelperFunctions.generate_add_loopback_interface_ip_command("10.100.3.1/32"),
+                    HelperFunctions.generate_set_static_arp_command("10.0.0.1", hosts_mac_addresses["as1r1"]["as1r1-eth1"]),
+                ]
             ),
         )
         as4r1 = self.addNode(
@@ -192,15 +190,6 @@ class Topology(Topo):
             ),
         )
 
-        # Route server to SDX switch
-        self.addLink(
-            ixp1s1_bird,
-            ixp1s1,
-            intfName1="ixp1s1-b-eth0",
-            params1={"ip": "10.0.0.254/24"},
-            intfName2="ixp1s1-eth0",
-        )
-
         # AS1 internal
         self.addLink(as1r1, as1s1, intfName1="as1r1-eth0", params1={"ip": "10.1.0.1/24"}, intfName2="as1s1-eth0")
         self.addLink(as1h1, as1s1, intfName1="as1h1-eth0", params1={"ip": "10.1.0.101/24"}, intfName2="as1s1-eth1")
@@ -226,7 +215,7 @@ class Topology(Topo):
         self.addLink(as2r1, ixp1s1, intfName1="as2r1-eth1", params1={"ip": "10.0.0.2/24"}, intfName2="ixp1s1-eth2")
         self.addLink(as3r1, ixp1s1, intfName1="as3r1-eth1", params1={"ip": "10.0.0.3/24"}, intfName2="ixp1s1-eth3")
 
-        # AS4 to AS2 direct link - FAST (100 Mbps)
+        # AS4 to AS2 direct link - fast path
         self.addLink(
             as4r1, as2r1,
             intfName1="as4r1-eth1", params1={"ip": "10.0.1.2/24"},
@@ -234,7 +223,7 @@ class Topology(Topo):
             bw=100,
         )
 
-        # AS4 to AS3 direct link - SLOW (1 Mbps)
+        # AS4 to AS3 direct link - backup path
         self.addLink(
             as4r1, as3r1,
             intfName1="as4r1-eth2", params1={"ip": "10.0.2.2/24"},

@@ -22,8 +22,7 @@ CLI_NETWORK_FILE = $(SRC_MININET_DIR)/topology_cli.py
 
 CHECKS_NETWORK_FILE = $(SRC_MININET_DIR)/topology_checks.py
 CHECKS_CASES_FILE = $(TESTS_CHECKS_DIR)/traffic_checker.py
-
-CONVERGENCE_TEST_FILE = $(SRC_MININET_DIR)/topology_convergence_test.py
+CONVERGENCE_NETWORK_FILE = $(SRC_MININET_DIR)/topology_bgp_convergence_test.py
 
 PYTHON_INTERPRETER = /opt/p4/p4dev-python-venv/bin/python3
 
@@ -96,7 +95,7 @@ run-convergence-1:
 	$(MAKE) run-init
 	mkdir -p $(IXP1S1_CONTROLLER_TEMP_DIR)
 	$(PYTHON_INTERPRETER) $(TASKS_DIR)/1/$(IXP1S1_CONTROLLER_SCRIPT_FILE) > $(IXP1S1_CONTROLLER_LOG_FILE) 2>&1 & echo $$! > $(IXP1S1_CONTROLLER_PID_FILE)
-	sudo $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CONVERGENCE_TEST_FILE)
+	sudo $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CONVERGENCE_NETWORK_FILE)
 	$(MAKE) run-stop
 
 run-stop:
@@ -105,7 +104,8 @@ run-stop:
 
 run-clean:
 	$(MAKE) run-stop
-	sudo rm -rf $(TEMP_DIR)
+	sudo find $(TEMP_DIR) -mindepth 1 -exec rm -rf {} + 2>/dev/null || true
+	sudo rm -rf $(TEMP_DIR) 2>/dev/null || true
 
 clean:
 	$(MAKE) run-clean
