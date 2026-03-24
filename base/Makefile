@@ -23,6 +23,8 @@ CLI_NETWORK_FILE = $(SRC_MININET_DIR)/topology_cli.py
 CHECKS_NETWORK_FILE = $(SRC_MININET_DIR)/topology_checks.py
 CHECKS_CASES_FILE = $(TESTS_CHECKS_DIR)/traffic_checker.py
 
+CONVERGENCE_TEST_FILE = $(SRC_MININET_DIR)/topology_convergence_test.py
+
 PYTHON_INTERPRETER = /opt/p4/p4dev-python-venv/bin/python3
 
 IXP_SWITCH_P4_COMPILER_IN_FILE = $(SRC_P4_DIR)/ixp_switch.p4
@@ -43,6 +45,7 @@ IXP1S1_CONTROLLER_PID_FILE = $(IXP1S1_CONTROLLER_TEMP_DIR)/ixp1s1_controller.pid
 	run-init \
 	run-task-1 \
 	run-checks-1 \
+	run-convergence-1 \
 	run-stop \
 	run-clean \
 	clean \
@@ -86,6 +89,15 @@ endif
 	sudo $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CHECKS_NETWORK_FILE)
 	$(MAKE) run-stop
 	$(PYTHON_INTERPRETER) $(TESTS_DIR)/1/$(CHECKS_CASES_FILE)
+
+run-convergence-1:
+	$(MAKE) run-clean
+	$(MAKE) build-task-1
+	$(MAKE) run-init
+	mkdir -p $(IXP1S1_CONTROLLER_TEMP_DIR)
+	$(PYTHON_INTERPRETER) $(TASKS_DIR)/1/$(IXP1S1_CONTROLLER_SCRIPT_FILE) > $(IXP1S1_CONTROLLER_LOG_FILE) 2>&1 & echo $$! > $(IXP1S1_CONTROLLER_PID_FILE)
+	sudo $(PYTHON_INTERPRETER) $(NETWORKS_DIR)/1/$(CONVERGENCE_TEST_FILE)
+	$(MAKE) run-stop
 
 run-stop:
 	sudo mn -c

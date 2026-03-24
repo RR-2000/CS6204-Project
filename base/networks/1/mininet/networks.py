@@ -226,18 +226,20 @@ class Topology(Topo):
         self.addLink(as2r1, ixp1s1, intfName1="as2r1-eth1", params1={"ip": "10.0.0.2/24"}, intfName2="ixp1s1-eth2")
         self.addLink(as3r1, ixp1s1, intfName1="as3r1-eth1", params1={"ip": "10.0.0.3/24"}, intfName2="ixp1s1-eth3")
 
-        # AS4 to AS2 direct link
+        # AS4 to AS2 direct link - FAST (100 Mbps)
         self.addLink(
             as4r1, as2r1,
             intfName1="as4r1-eth1", params1={"ip": "10.0.1.2/24"},
             intfName2="as2r1-eth2", params2={"ip": "10.0.1.1/24"},
+            bw=100,
         )
 
-        # AS4 to AS3 direct link
+        # AS4 to AS3 direct link - SLOW (1 Mbps)
         self.addLink(
             as4r1, as3r1,
             intfName1="as4r1-eth2", params1={"ip": "10.0.2.2/24"},
             intfName2="as3r1-eth2", params2={"ip": "10.0.2.1/24"},
+            bw=1,
         )
 
 # pylint: disable=W0108
