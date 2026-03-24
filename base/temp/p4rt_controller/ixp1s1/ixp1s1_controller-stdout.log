@@ -1,0 +1,326 @@
+1774348631.333 INFO finsy [Task-1] Starting MAC learning controller for ixp1s1
+1774348631.335 INFO finsy [Task-1] Switch supports 4 ports (1-4) with 1024 MAC addresses
+1774348631.336 INFO finsy [Task-1] MAC aging timeout: 300 seconds
+1774348631.337 INFO finsy [ixp1s1] Switch start (name='ixp1s1', address='127.0.0.1:50001', device_id=1, role_name='', initial_election_id=10)
+1774348636.547 WARNING finsy [ixp1s1|Switch._run&] gNMI is not implemented
+1774348636.548 INFO finsy [ixp1s1] Channel up (is_primary=True, role_name='', p4r=1.3.0): 
+1774348636.589 INFO finsy [ixp1s1] Pipeline installed: pipeline='' version='' arch='v1model'
+1774348636.593 INFO finsy [ixp1s1] Channel ready (is_primary=True, role_name=''): pipeline='' version='' arch='v1model'
+1774348636.621 INFO finsy [ixp1s1] Installed static router MAC f0:00:0a:01:01:01 on port 1 for switch ixp1s1
+1774348636.622 INFO finsy [ixp1s1] Installed static router MAC f0:00:0a:01:02:01 on port 2 for switch ixp1s1
+1774348636.623 INFO finsy [ixp1s1] Installed static router MAC f0:00:0a:01:03:01 on port 3 for switch ixp1s1
+1774348636.623 INFO finsy [ixp1s1] Switch ixp1s1 ready with multicast group configured
+1774348636.624 INFO finsy [ixp1s1] Starting packet reader for ixp1s1
+1774348636.624 INFO finsy [ixp1s1] Starting idle timeout listener for ixp1s1
+1774348636.654 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.656 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348636.665 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.666 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is None, learned on port 1
+1774348636.670 INFO finsy [ixp1s1] Learned MAC fe:79:7b:08:76:71 on port 1 for switch ixp1s1
+1774348636.685 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.687 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is None, learned on port 2
+1774348636.693 INFO finsy [ixp1s1] Learned MAC 5a:84:43:ea:2c:27 on port 2 for switch ixp1s1
+1774348636.709 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.710 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is None, learned on port 3
+1774348636.714 INFO finsy [ixp1s1] Learned MAC 6e:7b:e9:b9:35:0f on port 3 for switch ixp1s1
+1774348636.738 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.739 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348636.760 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.763 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348636.793 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.794 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348636.823 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.824 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348636.826 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.827 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348636.850 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.851 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348636.872 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.873 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348636.900 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.901 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348636.929 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.931 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348636.954 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.955 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348636.974 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.977 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348636.986 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.988 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348636.996 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348636.998 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.004 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.005 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.013 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.013 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.020 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.021 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.027 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.028 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.033 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.033 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is 1, learned on port 1
+1774348637.061 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.062 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.069 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.069 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.082 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.083 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.088 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.089 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.094 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.096 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.105 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.106 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.112 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.113 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.120 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.121 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.131 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.132 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.138 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.138 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.147 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.148 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.155 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.156 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.162 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.163 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.171 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.171 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.177 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.178 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.188 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.189 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.198 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.199 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.204 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.205 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.214 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.214 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.221 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.222 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.231 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.232 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.239 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.243 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.252 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.252 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.264 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.265 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.272 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.273 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.281 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.282 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.291 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.293 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.301 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.302 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.309 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.310 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.319 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.320 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.326 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.327 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.335 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.335 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.342 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.342 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.363 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.367 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.376 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.377 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.394 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.396 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.401 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.401 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.412 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.415 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.421 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.422 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.427 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.428 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.435 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.437 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.444 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.445 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.451 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.452 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.458 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.459 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.464 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.465 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.471 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.473 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.479 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.480 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348637.484 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.485 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348637.507 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.507 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348637.534 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.535 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348637.540 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.541 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348637.988 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348637.989 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is 1, learned on port 1
+1774348638.426 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.427 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348638.453 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.454 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348638.524 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.526 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348638.533 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.535 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348638.539 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.540 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348638.544 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.545 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348638.621 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.622 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348638.633 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.634 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348638.640 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.640 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348638.646 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.646 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348638.688 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.689 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348638.700 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.701 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348638.711 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.712 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348638.717 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.718 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348638.911 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.912 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is 1, learned on port 1
+1774348638.966 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348638.968 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.112 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.113 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348639.160 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.162 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348639.180 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.181 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is 1, learned on port 1
+1774348639.218 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.219 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.232 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.233 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348639.238 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.238 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348639.250 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.258 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.491 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.492 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348639.626 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.627 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348639.674 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.675 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348639.733 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.735 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348639.749 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.750 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.755 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.755 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.805 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.806 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348639.862 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.863 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.887 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.887 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348639.907 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.912 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348639.928 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.929 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348639.972 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348639.975 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348640.209 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348640.210 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348640.274 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348640.275 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348640.330 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348640.332 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348640.343 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348640.344 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348640.361 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348640.362 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348640.973 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348640.974 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348641.025 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348641.026 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348641.982 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348641.983 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is 1, learned on port 1
+1774348642.173 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348642.174 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348642.442 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348642.443 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348642.980 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348642.982 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348643.205 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348643.207 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348643.216 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348643.217 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348643.328 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348643.329 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348643.338 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348643.338 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348644.418 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348644.420 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348644.991 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348644.992 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348646.200 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348646.201 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348646.208 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348646.208 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348646.329 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348646.330 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348646.338 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348646.339 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348646.662 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348646.663 INFO finsy [ixp1s1] Current port for MAC fe:79:7b:08:76:71 on switch ixp1s1 is 1, learned on port 1
+1774348647.011 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348647.012 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348647.167 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348647.168 INFO finsy [ixp1s1] Current port for MAC 6e:7b:e9:b9:35:0f on switch ixp1s1 is 3, learned on port 3
+1774348647.697 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348647.699 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348648.211 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348648.212 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348648.758 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348648.759 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348648.816 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348648.817 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348648.825 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348648.826 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348649.035 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.036 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348649.046 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.047 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348649.079 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.080 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348649.181 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.182 INFO finsy [ixp1s1] Current port for MAC 5a:84:43:ea:2c:27 on switch ixp1s1 is 2, learned on port 2
+1774348649.250 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.251 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348649.257 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.258 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348649.281 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.284 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348649.287 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.291 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348649.309 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.310 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348649.320 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.321 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:01:01 on switch ixp1s1 is 1, learned on port 1
+1774348649.328 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.331 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348649.339 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.340 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348649.350 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.351 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348649.388 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.391 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348649.394 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.398 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:02:01 on switch ixp1s1 is 2, learned on port 2
+1774348649.448 INFO finsy [ixp1s1] Packet received on ixp1s1
+1774348649.449 INFO finsy [ixp1s1] Current port for MAC f0:00:0a:01:03:01 on switch ixp1s1 is 3, learned on port 3
+1774348650.109 INFO finsy [ixp1s1] Channel down (is_primary=True, role_name='')
