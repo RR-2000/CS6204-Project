@@ -13,7 +13,7 @@ from networks import Topology
 SCRIPT_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
 REPOSITORY_DIRECTORY = os.path.join(SCRIPT_DIRECTORY, "../../../")
 TEMP_DIRECTORY = os.path.join(REPOSITORY_DIRECTORY, "temp")
-FAST_FAILOVER_SIGNAL_FILE = os.path.join(TEMP_DIRECTORY, "sdx_fast_failover.signal")
+RESULTS_DIRECTORY = os.path.join(REPOSITORY_DIRECTORY, "results")
 CONTROLLER_LOG_FILE = os.path.join(
     TEMP_DIRECTORY,
     "p4rt_controller",
@@ -43,6 +43,8 @@ MODE_LABEL = "SDX_FAST" if RECOVERY_MODE == "sdx" else "BGP_ONLY"
 
 LOG_FILE = os.path.join(TEMP_DIRECTORY, f"{RECOVERY_MODE}_convergence.log")
 JSON_LOG_FILE = os.path.join(TEMP_DIRECTORY, f"{RECOVERY_MODE}_convergence.json")
+PERSISTENT_LOG_FILE = os.path.join(RESULTS_DIRECTORY, f"{RECOVERY_MODE}_convergence.log")
+PERSISTENT_JSON_LOG_FILE = os.path.join(RESULTS_DIRECTORY, f"{RECOVERY_MODE}_convergence.json")
 
 
 def ping_once(host, target, timeout=1):
@@ -58,6 +60,16 @@ def ping_once(host, target, timeout=1):
             except (IndexError, ValueError):
                 return True, None
     return True, None
+
+
+def collect_rtts(host, target, samples=3, timeout=1):
+    rtts = []
+    for _ in range(samples):
+        success, rtt_ms = ping_once(host, target, timeout=timeout)
+        if success and rtt_ms is not None:
+            rtts.append(rtt_ms)
+        time.sleep(0.2)
+    return rtts
 
 
 def wait_for_initial_convergence(network):
@@ -87,6 +99,16 @@ def as1_best_path_uses_as3(network):
     as1r1 = network.getNodeByName("as1r1")
     bgp_output = as1r1.cmd('vtysh -c "show bgp ipv4 unicast 10.4.0.0/24"')
     return "10.0.0.3 from 10.0.0.3" in bgp_output and "best" in bgp_output
+
+
+def as4_best_path_uses_as3(network):
+    as4r1 = network.getNodeByName("as4r1")
+    bgp_output = as4r1.cmd('vtysh -c "show bgp ipv4 unicast 10.1.0.0/24"')
+    return "10.0.2.1 from 10.0.2.1" in bgp_output and "best" in bgp_output
+
+
+def bgp_is_fully_synced(network):
+    return as1_best_path_uses_as3(network) and as4_best_path_uses_as3(network)
 
 
 def show_reconvergence_state(network, label):
@@ -200,10 +222,6 @@ def run_test(network):
 
     output("*** Bringing down interface: as2r1-eth1\n")
     t_link_down = time.time()
-    if RECOVERY_MODE == "sdx":
-        os.makedirs(TEMP_DIRECTORY, exist_ok=True)
-        with open(FAST_FAILOVER_SIGNAL_FILE, "w", encoding="utf-8") as file:
-            file.write("enabled\n")
     as2r1.cmd("ip link set dev as2r1-eth1 down")
 
     t_ping_fail = None
@@ -221,24 +239,21 @@ def run_test(network):
         output("*** WARNING: Connectivity never dropped after link failure\n")
         output("*** Restoring interface: as2r1-eth1\n")
         as2r1.cmd("ip link set dev as2r1-eth1 up")
-        if os.path.exists(FAST_FAILOVER_SIGNAL_FILE):
-            os.remove(FAST_FAILOVER_SIGNAL_FILE)
         return None
 
     t_recovered = None
-    first_rtt = None
+    post_recovery_avg_rtt = None
     t_bgp_synced = None
     deadline = time.time() + MAX_RECONVERGENCE_WAIT
     output(f"*** Waiting for {MODE_LABEL} recovery...\n")
     while time.time() < deadline:
         success, rtt_ms = ping_once(source, PING_TARGET)
-        if t_bgp_synced is None and as1_best_path_uses_as3(network):
+        if t_bgp_synced is None and bgp_is_fully_synced(network):
             t_bgp_synced = time.time()
-            output(f"*** BGP synced to AS3 after {t_bgp_synced - t_link_down:.2f}s\n")
+            output(f"*** BGP fully synced after {t_bgp_synced - t_link_down:.2f}s\n")
         if success:
             if t_recovered is None:
                 t_recovered = time.time()
-                first_rtt = rtt_ms
                 output(f"*** Recovered after {t_recovered - t_link_down:.2f}s\n")
             if RECOVERY_MODE != "sdx" or t_bgp_synced is not None:
                 break
@@ -254,20 +269,20 @@ def run_test(network):
         show_best_paths(network, "recovery timeout")
         output("*** Restoring interface: as2r1-eth1\n")
         as2r1.cmd("ip link set dev as2r1-eth1 up")
-        if os.path.exists(FAST_FAILOVER_SIGNAL_FILE):
-            os.remove(FAST_FAILOVER_SIGNAL_FILE)
         output(f"*** ERROR: {MODE_LABEL} recovery did not complete within timeout\n")
         return None
 
-    if t_bgp_synced is None and as1_best_path_uses_as3(network):
+    if t_bgp_synced is None and bgp_is_fully_synced(network):
         t_bgp_synced = time.time()
-        output(f"*** BGP synced to AS3 after {t_bgp_synced - t_link_down:.2f}s\n")
+        output(f"*** BGP fully synced after {t_bgp_synced - t_link_down:.2f}s\n")
+
+    rtts = collect_rtts(source, PING_TARGET, samples=3, timeout=1)
+    if rtts:
+        post_recovery_avg_rtt = sum(rtts) / len(rtts)
 
     show_best_paths(network, "after failure")
     output("*** Restoring interface: as2r1-eth1\n")
     as2r1.cmd("ip link set dev as2r1-eth1 up")
-    if os.path.exists(FAST_FAILOVER_SIGNAL_FILE):
-        os.remove(FAST_FAILOVER_SIGNAL_FILE)
 
     return {
         "t_link_down": t_link_down,
@@ -279,12 +294,13 @@ def run_test(network):
         "convergence_time": t_recovered - t_link_down,
         "bgp_sync_time": None if t_bgp_synced is None else t_bgp_synced - t_link_down,
         "packet_loss_count": packet_loss_count,
-        "first_response_rtt": first_rtt,
+        "post_recovery_avg_rtt": post_recovery_avg_rtt,
     }
 
 
 def save_results(result):
     os.makedirs(TEMP_DIRECTORY, exist_ok=True)
+    os.makedirs(RESULTS_DIRECTORY, exist_ok=True)
     with open(LOG_FILE, "w", encoding="utf-8") as file:
         file.write(f"{MODE_LABEL} Recovery Test\n")
         file.write("=" * 40 + "\n")
@@ -306,10 +322,35 @@ def save_results(result):
         else:
             file.write(f"BGP sync time:        {result['bgp_sync_time']:.2f}s\n")
         file.write(f"Packet loss count:    {result['packet_loss_count']}\n")
-        if result["first_response_rtt"] is None:
-            file.write("First response RTT:   N/A\n")
+        if result["post_recovery_avg_rtt"] is None:
+            file.write("Post-recovery RTT:    N/A\n")
         else:
-            file.write(f"First response RTT:   {result['first_response_rtt']:.3f} ms\n")
+            file.write(f"Post-recovery RTT:    {result['post_recovery_avg_rtt']:.3f} ms\n")
+
+    with open(PERSISTENT_LOG_FILE, "w", encoding="utf-8") as file:
+        file.write(f"{MODE_LABEL} Recovery Test\n")
+        file.write("=" * 40 + "\n")
+        file.write(f"Test time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        file.write(f"Mode:      {MODE_LABEL}\n")
+        file.write(f"Ping:      {PING_SOURCE} -> {PING_TARGET}\n\n")
+
+        if result is None:
+            file.write("Result: FAILED\n")
+        else:
+            file.write("Result: SUCCESS\n")
+            file.write(f"Link failed:          as2r1-eth1 administratively down\n")
+            file.write(f"Detection time:       {result['detection_time']:.2f}s\n")
+            file.write(f"Blackout duration:    {result['blackout_duration']:.2f}s\n")
+            file.write(f"Convergence time:     {result['convergence_time']:.2f}s\n")
+            if result["bgp_sync_time"] is None:
+                file.write("BGP sync time:        N/A\n")
+            else:
+                file.write(f"BGP sync time:        {result['bgp_sync_time']:.2f}s\n")
+            file.write(f"Packet loss count:    {result['packet_loss_count']}\n")
+            if result["post_recovery_avg_rtt"] is None:
+                file.write("Post-recovery RTT:    N/A\n")
+            else:
+                file.write(f"Post-recovery RTT:    {result['post_recovery_avg_rtt']:.3f} ms\n")
 
     payload = {
         "test_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -331,15 +372,17 @@ def save_results(result):
                     else round(result["bgp_sync_time"], 2)
                 ),
                 "packet_loss_count": result["packet_loss_count"],
-                "first_response_rtt_ms": (
+                "post_recovery_avg_rtt_ms": (
                     None
-                    if result["first_response_rtt"] is None
-                    else round(result["first_response_rtt"], 3)
+                    if result["post_recovery_avg_rtt"] is None
+                    else round(result["post_recovery_avg_rtt"], 3)
                 ),
             }
         )
 
     with open(JSON_LOG_FILE, "w", encoding="utf-8") as file:
+        json.dump(payload, file, indent=2)
+    with open(PERSISTENT_JSON_LOG_FILE, "w", encoding="utf-8") as file:
         json.dump(payload, file, indent=2)
 
 
@@ -369,9 +412,11 @@ if __name__ == "__main__":
         if result["bgp_sync_time"] is not None:
             output(f"*** BGP sync time:     {result['bgp_sync_time']:.2f}s\n")
         output(f"*** Packet loss:       {result['packet_loss_count']}\n")
-        if result["first_response_rtt"] is not None:
-            output(f"*** First RTT:         {result['first_response_rtt']:.3f} ms\n")
+        if result["post_recovery_avg_rtt"] is not None:
+            output(f"*** Post-recovery RTT: {result['post_recovery_avg_rtt']:.3f} ms\n")
         output(f"*** Log saved to {LOG_FILE}\n")
         output(f"*** JSON saved to {JSON_LOG_FILE}\n")
+        output(f"*** Persistent log:    {PERSISTENT_LOG_FILE}\n")
+        output(f"*** Persistent JSON:   {PERSISTENT_JSON_LOG_FILE}\n")
 
     network.stop()

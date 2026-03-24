@@ -4,11 +4,12 @@ import os
 
 SCRIPT_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
 TEMP_DIRECTORY = os.path.join(SCRIPT_DIRECTORY, "temp")
+RESULTS_DIRECTORY = os.path.join(SCRIPT_DIRECTORY, "results")
 
-BGP_JSON_FILE = os.path.join(TEMP_DIRECTORY, "bgp_convergence.json")
-SDX_JSON_FILE = os.path.join(TEMP_DIRECTORY, "sdx_convergence.json")
-COMPARE_JSON_FILE = os.path.join(TEMP_DIRECTORY, "recovery_comparison.json")
-COMPARE_MD_FILE = os.path.join(TEMP_DIRECTORY, "recovery_comparison.md")
+BGP_JSON_FILE = os.path.join(RESULTS_DIRECTORY, "bgp_convergence.json")
+SDX_JSON_FILE = os.path.join(RESULTS_DIRECTORY, "sdx_convergence.json")
+COMPARE_JSON_FILE = os.path.join(RESULTS_DIRECTORY, "recovery_comparison.json")
+COMPARE_MD_FILE = os.path.join(RESULTS_DIRECTORY, "recovery_comparison.md")
 
 
 def load_json(path):
@@ -37,7 +38,7 @@ def main():
             "convergence_time_s": metric_delta(bgp_data, sdx_data, "convergence_time_s"),
             "bgp_sync_time_s": metric_delta(bgp_data, sdx_data, "bgp_sync_time_s"),
             "packet_loss_count": metric_delta(bgp_data, sdx_data, "packet_loss_count"),
-            "first_response_rtt_ms": metric_delta(bgp_data, sdx_data, "first_response_rtt_ms"),
+            "post_recovery_avg_rtt_ms": metric_delta(bgp_data, sdx_data, "post_recovery_avg_rtt_ms"),
         },
     }
 
@@ -57,7 +58,7 @@ def main():
         ("convergence_time_s", "Traffic recovery time (s)"),
         ("bgp_sync_time_s", "BGP sync time (s)"),
         ("packet_loss_count", "Packet loss count"),
-        ("first_response_rtt_ms", "First response RTT (ms)"),
+        ("post_recovery_avg_rtt_ms", "Post-recovery RTT (ms)"),
     ]:
         lines.append(
             f"| {label} | {bgp_data.get(key)} | {sdx_data.get(key)} | {comparison['delta_sdx_minus_bgp'].get(key)} |"

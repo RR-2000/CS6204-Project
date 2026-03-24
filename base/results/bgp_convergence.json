@@ -1,0 +1,14 @@
+{
+  "test_time": "2026-03-24 19:32:36",
+  "mode": "BGP_ONLY",
+  "ping_source": "as1h1",
+  "ping_target": "10.4.0.101",
+  "result": "SUCCESS",
+  "failure_event": "as2r1-eth1 administratively down",
+  "detection_time_s": 1.02,
+  "blackout_duration_s": 8.16,
+  "convergence_time_s": 9.18,
+  "bgp_sync_time_s": 2.12,
+  "packet_loss_count": 5,
+  "post_recovery_avg_rtt_ms": 43.205
+}

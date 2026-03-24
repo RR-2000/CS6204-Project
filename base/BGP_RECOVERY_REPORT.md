@@ -21,7 +21,8 @@ Expected behavior:
 
 In SDX fast recovery mode:
 
-- the experiment triggers an immediate SDX failover event when the `AS2` uplink is taken down
+- the controller directly monitors the local switch interface connected to `AS2`
+- when that local interface goes down, the controller immediately installs the SDX failover rule
 - packets from `AS1` that were previously sent to `AS2` are redirected to `AS3`
 - BGP still converges in the background
 
@@ -139,7 +140,7 @@ Example measured result from the latest successful BGP-only run:
 - Blackout duration: `8.16 s`
 - Convergence time: `9.19 s`
 - Packet loss count: `4`
-- First response RTT after recovery: `41.403 ms`
+- Post-recovery RTT: measured as the average of the first few successful pings after recovery
 
 ## Evaluation Notes
 

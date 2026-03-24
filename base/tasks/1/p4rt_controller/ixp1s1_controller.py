@@ -4,6 +4,7 @@ import pathlib
 import sys
 from typing import Dict, Tuple
 import asyncio
+import subprocess
 
 import finsy
 
@@ -23,18 +24,13 @@ BUILD_DIRECTORY = os.path.join(
     REPOSITORY_DIRECTORY,
     "build/p4"
 )
-TEMP_DIRECTORY = os.path.join(
-    REPOSITORY_DIRECTORY,
-    "temp"
-)
 
 CPU_PORT = 510
 CPU_SESSION = 64
 NUM_PORTS = 32
 MAC_ENTRY_IDLE_TIMEOUT_NS = 300_000_000_000  # 300 seconds
 ENABLE_SDX_FAST_FAILOVER = os.environ.get("ENABLE_SDX_FAST_FAILOVER", "0") == "1"
-FAST_FAILOVER_SIGNAL_FILE = os.path.join(TEMP_DIRECTORY, "sdx_fast_failover.signal")
-SIGNAL_POLL_INTERVAL_SEC = 0.1
+LINK_POLL_INTERVAL_SEC = 0.1
 STATIC_ROUTER_MACS = {
     "f0:00:0a:01:01:01": 1,
     "f0:00:0a:01:02:01": 2,
@@ -43,6 +39,7 @@ STATIC_ROUTER_MACS = {
 AS1_PORT = 1
 AS2_PORT = 2
 AS3_PORT = 3
+AS2_SWITCH_INTERFACE = "ixp1s1-eth2"
 AS2_ROUTER_MAC = "f0:00:0a:01:02:01"
 AS3_ROUTER_MAC = "f0:00:0a:01:03:01"
 
@@ -150,7 +147,7 @@ async def controller_ready_handler(
     # Start idle timeout listener
     switch.create_task(handle_idle_timeouts(switch), name=f"{switch.name}-idle-timeout")
     if ENABLE_SDX_FAST_FAILOVER:
-        switch.create_task(monitor_fast_failover_signal(switch), name=f"{switch.name}-fast-failover")
+        switch.create_task(monitor_fast_failover_link(switch), name=f"{switch.name}-fast-failover")
     
     logger.info(f"Switch {switch.name} ready with multicast group configured")
 
@@ -296,17 +293,31 @@ async def _set_fast_failover_state(switch: finsy.Switch, enabled: bool):
         logger.info("Removed SDX fast failover override")
 
 
-async def monitor_fast_failover_signal(switch: finsy.Switch):
-    logger.info("Starting SDX fast failover signal monitor for %s", switch.name)
+def _read_interface_operstate(interface_name: str) -> str:
+    try:
+        result = subprocess.run(
+            ["cat", f"/sys/class/net/{interface_name}/operstate"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        return result.stdout.strip().lower()
+    except Exception:
+        return ""
+
+
+async def monitor_fast_failover_link(switch: finsy.Switch):
+    logger.info("Starting SDX fast failover link monitor for %s", switch.name)
     try:
         while True:
-            enabled = os.path.exists(FAST_FAILOVER_SIGNAL_FILE)
+            operstate = _read_interface_operstate(AS2_SWITCH_INTERFACE)
+            enabled = operstate not in {"up", "unknown"}
             await _set_fast_failover_state(switch, enabled)
-            await asyncio.sleep(SIGNAL_POLL_INTERVAL_SEC)
+            await asyncio.sleep(LINK_POLL_INTERVAL_SEC)
     except asyncio.CancelledError:
         pass
     except Exception as exc:
-        logger.error("SDX fast failover signal monitor failed: %s", exc)
+        logger.error("SDX fast failover link monitor failed: %s", exc)
 
 
 async def main():

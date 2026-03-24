@@ -1,6 +1,5 @@
-2026/03/24 19:09:03 BGP: [T83RR-8SM5G] bgpd 10.2.1 starting: vty@2605, bgp@<all>:179
-2026/03/24 19:09:04 BGP: [TXY0T-CYY6F][EC 100663299] Can't get remote address and port: Transport endpoint is not connected
-2026/03/24 19:09:05 BGP: [M59KS-A3ZXZ] bgp_update_receive: rcvd End-of-RIB for IPv4 Unicast from 10.0.1.2 in vrf default
-2026/03/24 19:09:06 BGP: [MVZKX-EG443][EC 33554452] bgp_process_packet: BGP OPEN receipt failed for peer: 10.0.0.1
-2026/03/24 19:09:07 BGP: [M59KS-A3ZXZ] bgp_update_receive: rcvd End-of-RIB for IPv4 Unicast from 10.0.0.1 in vrf default
-2026/03/24 19:09:09 BGP: [TXY0T-CYY6F][EC 100663299] Can't get remote address and port: Transport endpoint is not connected
+2026/03/24 19:33:00 BGP: [T83RR-8SM5G] bgpd 10.2.1 starting: vty@2605, bgp@<all>:179
+2026/03/24 19:33:01 BGP: [TXY0T-CYY6F][EC 100663299] Can't get remote address and port: Transport endpoint is not connected
+2026/03/24 19:33:02 BGP: [M59KS-A3ZXZ] bgp_update_receive: rcvd End-of-RIB for IPv4 Unicast from 10.0.1.2 in vrf default
+2026/03/24 19:33:03 BGP: [M59KS-A3ZXZ] bgp_update_receive: rcvd End-of-RIB for IPv4 Unicast from 10.0.0.1 in vrf default
+2026/03/24 19:33:05 BGP: [TXY0T-CYY6F][EC 100663299] Can't get remote address and port: Transport endpoint is not connected

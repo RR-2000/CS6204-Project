@@ -14,7 +14,8 @@ Current experiment goals:
 - BGP-only recovery:
   - when `AS2` loses its uplink to the shared exchange switch, BGP withdraws the old path and converges to `AS1 -> AS3 -> AS4`
 - SDX fast recovery:
-  - when the `AS2` failure event is triggered in the experiment, the controller immediately installs a redirect rule on the switch
+  - the controller directly monitors the local switch interface connected to `AS2`
+  - when that interface goes down, it immediately installs a redirect rule on the switch
   - packets from `AS1` that were headed to `AS2` are immediately redirected to `AS3`
   - BGP later converges to the same final path, so SDX recovery does not replace BGP convergence
 
@@ -58,8 +59,13 @@ Successful runs save metrics to:
 - [bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.json)
 - [sdx_convergence.log](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.log)
 - [sdx_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.json)
-- [recovery_comparison.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/recovery_comparison.md)
-- [recovery_comparison.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/recovery_comparison.json)
+
+Persistent copies for comparison are saved to:
+
+- [base/results/bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/bgp_convergence.json)
+- [base/results/sdx_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/sdx_convergence.json)
+- [base/results/recovery_comparison.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/recovery_comparison.md)
+- [base/results/recovery_comparison.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/recovery_comparison.json)
 
 Recorded metrics include:
 
@@ -68,7 +74,7 @@ Recorded metrics include:
 - traffic recovery time
 - BGP sync time
 - packet loss count
-- first response RTT after recovery
+- average RTT over the first few successful pings after recovery
 
 ## Implementation Notes
 
