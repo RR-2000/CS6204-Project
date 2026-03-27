@@ -1,2 +1,4 @@
-./base/temp/*
-./base/results/*
+base/temp
+base/results
+
+*_pycache__/
