@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import time
 import json
@@ -63,6 +64,12 @@ POST_RECOVERY_PROBES = 0
 BASELINE_RTT_SAMPLES = int(os.environ.get("BASELINE_RTT_SAMPLES", "5"))
 RECOVERY_STABLE_SUCCESSES = int(os.environ.get("RECOVERY_STABLE_SUCCESSES", "3"))
 TIMELINE_MAX_POINTS = int(os.environ.get("TIMELINE_MAX_POINTS", "2000"))
+POST_RECOVERY_WINDOW_S = float(os.environ.get("POST_RECOVERY_WINDOW_S", "60"))
+POST_RECOVERY_WINDOW_INTERVAL_S = float(os.environ.get("POST_RECOVERY_WINDOW_INTERVAL_S", "0.5"))
+POST_RECOVERY_PHASE_SPLIT_S = float(os.environ.get("POST_RECOVERY_PHASE_SPLIT_S", "30"))
+TRACE_MAX_HOPS = int(os.environ.get("TRACE_MAX_HOPS", "16"))
+TRACE_PROBES = int(os.environ.get("TRACE_PROBES", "1"))
+TRACE_TIMEOUT_S = int(os.environ.get("TRACE_TIMEOUT_S", "1"))
 RECOVERY_MODE = os.environ.get("RECOVERY_MODE", "bgp").strip().lower()
 MODE_LABEL = "SDX_FAST" if RECOVERY_MODE == "sdx" else "BGP_ONLY"
 
@@ -121,6 +128,114 @@ def timeline_sample(events):
     if sampled[-1] != events[-1]:
         sampled.append(events[-1])
     return sampled
+
+
+def trace_path_snapshot(host, target):
+    raw = host.cmd(
+        f"traceroute -n -q {TRACE_PROBES} -w {TRACE_TIMEOUT_S} -m {TRACE_MAX_HOPS} {target} || true"
+    )
+    hops = []
+    for line in raw.splitlines():
+        match = re.match(r"\s*(\d+)\s+(\S+)", line)
+        if not match:
+            continue
+        hop = match.group(2)
+        if hop != "*":
+            hops.append(hop)
+    return {
+        "hops": hops,
+        "hop_count": len(hops),
+        "raw": raw,
+    }
+
+
+def route_get_snapshot(host, target):
+    return host.cmd(f"ip route get {target} 2>/dev/null || true").strip()
+
+
+def collect_post_recovery_window(host, target, stable_recovery_ts):
+    if POST_RECOVERY_WINDOW_S <= 0:
+        return []
+
+    probes = []
+    deadline = time.time() + POST_RECOVERY_WINDOW_S
+    while time.time() < deadline:
+        probe_start = time.time()
+        success, rtt_ms = ping_once(host, target)
+        probes.append(
+            {
+                "t_s": round(probe_start - stable_recovery_ts, 3),
+                "ok": success,
+                "rtt_ms": None if rtt_ms is None else round(rtt_ms, 3),
+            }
+        )
+        elapsed = time.time() - probe_start
+        sleep_s = POST_RECOVERY_WINDOW_INTERVAL_S - elapsed
+        if sleep_s > 0:
+            time.sleep(sleep_s)
+
+    return probes
+
+
+def summarize_post_recovery_window(window_probes, baseline_rtts, baseline_avg_rtt):
+    sent = len(window_probes)
+    losses = len([p for p in window_probes if not p["ok"]])
+    success_rate = None if sent == 0 else (sent - losses) / sent
+    rtts = [p["rtt_ms"] for p in window_probes if p["ok"] and p["rtt_ms"] is not None]
+
+    avg_rtt = None if not rtts else statistics.fmean(rtts)
+    p50_rtt = percentile(rtts, 0.50)
+    p95_rtt = percentile(rtts, 0.95)
+    jitter_rtt = None if len(rtts) < 2 else statistics.pstdev(rtts)
+    min_rtt = None if not rtts else min(rtts)
+    max_rtt = None if not rtts else max(rtts)
+
+    split_s = max(0.0, min(POST_RECOVERY_PHASE_SPLIT_S, POST_RECOVERY_WINDOW_S))
+    first_phase = [
+        p["rtt_ms"]
+        for p in window_probes
+        if p["ok"] and p["rtt_ms"] is not None and p["t_s"] <= split_s
+    ]
+    second_phase = [
+        p["rtt_ms"]
+        for p in window_probes
+        if p["ok"] and p["rtt_ms"] is not None and p["t_s"] > split_s
+    ]
+    first_phase_avg = None if not first_phase else statistics.fmean(first_phase)
+    second_phase_avg = None if not second_phase else statistics.fmean(second_phase)
+
+    baseline_p50 = percentile(baseline_rtts, 0.50)
+    propagation_shift = None
+    if baseline_p50 is not None and p50_rtt is not None:
+        propagation_shift = p50_rtt - baseline_p50
+
+    queueing_tail = None
+    if p95_rtt is not None and p50_rtt is not None:
+        queueing_tail = p95_rtt - p50_rtt
+
+    second_phase_inflation = None
+    if baseline_avg_rtt is not None and second_phase_avg is not None and baseline_avg_rtt > 0:
+        second_phase_inflation = second_phase_avg / baseline_avg_rtt
+
+    return {
+        "post_recovery_window_s": POST_RECOVERY_WINDOW_S,
+        "post_recovery_window_probe_interval_s": POST_RECOVERY_WINDOW_INTERVAL_S,
+        "post_recovery_window_phase_split_s": split_s,
+        "post_recovery_window_packets_sent": sent,
+        "post_recovery_window_packet_loss_count": losses,
+        "post_recovery_window_success_rate": success_rate,
+        "post_recovery_window_avg_rtt_ms": avg_rtt,
+        "post_recovery_window_p50_rtt_ms": p50_rtt,
+        "post_recovery_window_p95_rtt_ms": p95_rtt,
+        "post_recovery_window_jitter_ms": jitter_rtt,
+        "post_recovery_window_min_rtt_ms": min_rtt,
+        "post_recovery_window_max_rtt_ms": max_rtt,
+        "post_recovery_window_first_phase_avg_rtt_ms": first_phase_avg,
+        "post_recovery_window_second_phase_avg_rtt_ms": second_phase_avg,
+        "propagation_shift_indicator_ms": propagation_shift,
+        "queueing_tail_indicator_ms": queueing_tail,
+        "second_phase_rtt_inflation_ratio": second_phase_inflation,
+    }
 
 
 def wait_for_initial_convergence(network, dir="forward"):
@@ -360,6 +475,11 @@ def run_test(network, dir="forward"):
 
     baseline_rtts = collect_rtts(source, ping_target, samples=BASELINE_RTT_SAMPLES, timeout=1)
     baseline_avg_rtt = None if not baseline_rtts else sum(baseline_rtts) / len(baseline_rtts)
+    baseline_p50_rtt = percentile(baseline_rtts, 0.50)
+    baseline_min_rtt = None if not baseline_rtts else min(baseline_rtts)
+
+    pre_failure_trace = trace_path_snapshot(source, ping_target)
+    pre_failure_route = route_get_snapshot(source, ping_target)
 
     probe_timeline = []
 
@@ -517,12 +637,27 @@ def run_test(network, dir="forward"):
     if baseline_avg_rtt is not None and post_recovery_avg_rtt is not None and baseline_avg_rtt > 0:
         rtt_inflation = post_recovery_avg_rtt / baseline_avg_rtt
 
+    post_recovery_trace = trace_path_snapshot(source, ping_target)
+    post_recovery_route = route_get_snapshot(source, ping_target)
+    path_changed_after_recovery = pre_failure_trace["hops"] != post_recovery_trace["hops"]
+
+    post_recovery_window_timeline = collect_post_recovery_window(source, ping_target, t_stable_recovered)
+    post_recovery_window_summary = summarize_post_recovery_window(
+        post_recovery_window_timeline,
+        baseline_rtts,
+        baseline_avg_rtt,
+    )
+
+    post_window_trace = trace_path_snapshot(source, ping_target)
+    post_window_route = route_get_snapshot(source, ping_target)
+    path_changed_during_window = post_recovery_trace["hops"] != post_window_trace["hops"]
+
     show_best_paths(network, "after failure")
     output("*** Restoring interface: as2r1-eth1 and as2r1-eth2\n")
     as2r1.cmd("ip link set dev as2r1-eth1 up")
     as2r1.cmd("ip link set dev as2r1-eth2 up")
 
-    return {
+    result = {
         "t_link_down": t_link_down,
         "t_ping_fail": t_ping_fail,
         "t_recovered": t_recovered,
@@ -544,13 +679,33 @@ def run_test(network, dir="forward"):
         "recovery_flap_count": recovery_flap_count,
         "recovery_success_rate": recovery_success_rate,
         "baseline_avg_rtt": baseline_avg_rtt,
+        "baseline_p50_rtt_ms": baseline_p50_rtt,
+        "baseline_min_rtt_ms": baseline_min_rtt,
         "post_recovery_avg_rtt": post_recovery_avg_rtt,
         "post_recovery_jitter_ms": post_recovery_jitter,
         "post_recovery_p50_rtt_ms": post_recovery_p50,
         "post_recovery_p95_rtt_ms": post_recovery_p95,
         "rtt_inflation_ratio": rtt_inflation,
+        "pre_failure_path_hops": pre_failure_trace["hops"],
+        "post_recovery_path_hops": post_recovery_trace["hops"],
+        "post_window_path_hops": post_window_trace["hops"],
+        "pre_failure_hop_count": pre_failure_trace["hop_count"],
+        "post_recovery_hop_count": post_recovery_trace["hop_count"],
+        "post_window_hop_count": post_window_trace["hop_count"],
+        "path_changed_after_recovery": path_changed_after_recovery,
+        "path_changed_during_window": path_changed_during_window,
+        "pre_failure_route_get": pre_failure_route,
+        "post_recovery_route_get": post_recovery_route,
+        "post_window_route_get": post_window_route,
+        "pre_failure_traceroute": pre_failure_trace["raw"],
+        "post_recovery_traceroute": post_recovery_trace["raw"],
+        "post_window_traceroute": post_window_trace["raw"],
         "probe_timeline": timeline_sample(probe_timeline),
+        "post_recovery_window_timeline": timeline_sample(post_recovery_window_timeline),
     }
+
+    result.update(post_recovery_window_summary)
+    return result
 
 
 def save_results(result, dir="forward"):
@@ -614,6 +769,18 @@ def save_results(result, dir="forward"):
             file.write(f"Post-recovery p95:    {result['post_recovery_p95_rtt_ms']:.3f} ms\n")
         if result["rtt_inflation_ratio"] is not None:
             file.write(f"RTT inflation:        {result['rtt_inflation_ratio']:.3f}x\n")
+        if result["post_recovery_window_avg_rtt_ms"] is not None:
+            file.write(f"Window avg RTT:       {result['post_recovery_window_avg_rtt_ms']:.3f} ms\n")
+        if result["post_recovery_window_second_phase_avg_rtt_ms"] is not None:
+            file.write(
+                f"Window phase2 RTT:    {result['post_recovery_window_second_phase_avg_rtt_ms']:.3f} ms\n"
+            )
+        if result["propagation_shift_indicator_ms"] is not None:
+            file.write(f"Prop shift indicator: {result['propagation_shift_indicator_ms']:.3f} ms\n")
+        if result["queueing_tail_indicator_ms"] is not None:
+            file.write(f"Queue tail indicator: {result['queueing_tail_indicator_ms']:.3f} ms\n")
+        file.write(f"Path changed:         {result['path_changed_after_recovery']}\n")
+        file.write(f"Path changed in win:  {result['path_changed_during_window']}\n")
 
     with open(persistent_log_file, "w", encoding="utf-8") as file:
         file.write(f"{MODE_LABEL} Recovery Test\n")
@@ -660,6 +827,18 @@ def save_results(result, dir="forward"):
                 file.write(f"Post-recovery p95:    {result['post_recovery_p95_rtt_ms']:.3f} ms\n")
             if result["rtt_inflation_ratio"] is not None:
                 file.write(f"RTT inflation:        {result['rtt_inflation_ratio']:.3f}x\n")
+            if result["post_recovery_window_avg_rtt_ms"] is not None:
+                file.write(f"Window avg RTT:       {result['post_recovery_window_avg_rtt_ms']:.3f} ms\n")
+            if result["post_recovery_window_second_phase_avg_rtt_ms"] is not None:
+                file.write(
+                    f"Window phase2 RTT:    {result['post_recovery_window_second_phase_avg_rtt_ms']:.3f} ms\n"
+                )
+            if result["propagation_shift_indicator_ms"] is not None:
+                file.write(f"Prop shift indicator: {result['propagation_shift_indicator_ms']:.3f} ms\n")
+            if result["queueing_tail_indicator_ms"] is not None:
+                file.write(f"Queue tail indicator: {result['queueing_tail_indicator_ms']:.3f} ms\n")
+            file.write(f"Path changed:         {result['path_changed_after_recovery']}\n")
+            file.write(f"Path changed in win:  {result['path_changed_during_window']}\n")
 
     payload = {
         "test_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -708,6 +887,16 @@ def save_results(result, dir="forward"):
                     if result["baseline_avg_rtt"] is None
                     else round(result["baseline_avg_rtt"], 3)
                 ),
+                "baseline_p50_rtt_ms": (
+                    None
+                    if result["baseline_p50_rtt_ms"] is None
+                    else round(result["baseline_p50_rtt_ms"], 3)
+                ),
+                "baseline_min_rtt_ms": (
+                    None
+                    if result["baseline_min_rtt_ms"] is None
+                    else round(result["baseline_min_rtt_ms"], 3)
+                ),
                 "post_recovery_avg_rtt_ms": (
                     None
                     if result["post_recovery_avg_rtt"] is None
@@ -733,7 +922,95 @@ def save_results(result, dir="forward"):
                     if result["rtt_inflation_ratio"] is None
                     else round(result["rtt_inflation_ratio"], 3)
                 ),
+                "post_recovery_window_s": round(result["post_recovery_window_s"], 3),
+                "post_recovery_window_probe_interval_s": round(
+                    result["post_recovery_window_probe_interval_s"],
+                    3,
+                ),
+                "post_recovery_window_phase_split_s": round(
+                    result["post_recovery_window_phase_split_s"],
+                    3,
+                ),
+                "post_recovery_window_packets_sent": result["post_recovery_window_packets_sent"],
+                "post_recovery_window_packet_loss_count": result[
+                    "post_recovery_window_packet_loss_count"
+                ],
+                "post_recovery_window_success_rate": (
+                    None
+                    if result["post_recovery_window_success_rate"] is None
+                    else round(result["post_recovery_window_success_rate"], 4)
+                ),
+                "post_recovery_window_avg_rtt_ms": (
+                    None
+                    if result["post_recovery_window_avg_rtt_ms"] is None
+                    else round(result["post_recovery_window_avg_rtt_ms"], 3)
+                ),
+                "post_recovery_window_p50_rtt_ms": (
+                    None
+                    if result["post_recovery_window_p50_rtt_ms"] is None
+                    else round(result["post_recovery_window_p50_rtt_ms"], 3)
+                ),
+                "post_recovery_window_p95_rtt_ms": (
+                    None
+                    if result["post_recovery_window_p95_rtt_ms"] is None
+                    else round(result["post_recovery_window_p95_rtt_ms"], 3)
+                ),
+                "post_recovery_window_jitter_ms": (
+                    None
+                    if result["post_recovery_window_jitter_ms"] is None
+                    else round(result["post_recovery_window_jitter_ms"], 3)
+                ),
+                "post_recovery_window_min_rtt_ms": (
+                    None
+                    if result["post_recovery_window_min_rtt_ms"] is None
+                    else round(result["post_recovery_window_min_rtt_ms"], 3)
+                ),
+                "post_recovery_window_max_rtt_ms": (
+                    None
+                    if result["post_recovery_window_max_rtt_ms"] is None
+                    else round(result["post_recovery_window_max_rtt_ms"], 3)
+                ),
+                "post_recovery_window_first_phase_avg_rtt_ms": (
+                    None
+                    if result["post_recovery_window_first_phase_avg_rtt_ms"] is None
+                    else round(result["post_recovery_window_first_phase_avg_rtt_ms"], 3)
+                ),
+                "post_recovery_window_second_phase_avg_rtt_ms": (
+                    None
+                    if result["post_recovery_window_second_phase_avg_rtt_ms"] is None
+                    else round(result["post_recovery_window_second_phase_avg_rtt_ms"], 3)
+                ),
+                "propagation_shift_indicator_ms": (
+                    None
+                    if result["propagation_shift_indicator_ms"] is None
+                    else round(result["propagation_shift_indicator_ms"], 3)
+                ),
+                "queueing_tail_indicator_ms": (
+                    None
+                    if result["queueing_tail_indicator_ms"] is None
+                    else round(result["queueing_tail_indicator_ms"], 3)
+                ),
+                "second_phase_rtt_inflation_ratio": (
+                    None
+                    if result["second_phase_rtt_inflation_ratio"] is None
+                    else round(result["second_phase_rtt_inflation_ratio"], 3)
+                ),
+                "pre_failure_path_hops": result["pre_failure_path_hops"],
+                "post_recovery_path_hops": result["post_recovery_path_hops"],
+                "post_window_path_hops": result["post_window_path_hops"],
+                "pre_failure_hop_count": result["pre_failure_hop_count"],
+                "post_recovery_hop_count": result["post_recovery_hop_count"],
+                "post_window_hop_count": result["post_window_hop_count"],
+                "path_changed_after_recovery": result["path_changed_after_recovery"],
+                "path_changed_during_window": result["path_changed_during_window"],
+                "pre_failure_route_get": result["pre_failure_route_get"],
+                "post_recovery_route_get": result["post_recovery_route_get"],
+                "post_window_route_get": result["post_window_route_get"],
+                "pre_failure_traceroute": result["pre_failure_traceroute"],
+                "post_recovery_traceroute": result["post_recovery_traceroute"],
+                "post_window_traceroute": result["post_window_traceroute"],
                 "probe_timeline": result["probe_timeline"],
+                "post_recovery_window_timeline": result["post_recovery_window_timeline"],
             }
         )
 
@@ -792,6 +1069,18 @@ if __name__ == "__main__":
             output(f"*** Post-recovery RTT: {result['post_recovery_avg_rtt']:.3f} ms\n")
         if result["post_recovery_jitter_ms"] is not None:
             output(f"*** Post-recovery jitter: {result['post_recovery_jitter_ms']:.3f} ms\n")
+        if result["post_recovery_window_avg_rtt_ms"] is not None:
+            output(f"*** Window avg RTT:     {result['post_recovery_window_avg_rtt_ms']:.3f} ms\n")
+        if result["post_recovery_window_second_phase_avg_rtt_ms"] is not None:
+            output(
+                f"*** Window phase2 RTT:  {result['post_recovery_window_second_phase_avg_rtt_ms']:.3f} ms\n"
+            )
+        if result["propagation_shift_indicator_ms"] is not None:
+            output(f"*** Prop shift ind:     {result['propagation_shift_indicator_ms']:.3f} ms\n")
+        if result["queueing_tail_indicator_ms"] is not None:
+            output(f"*** Queue tail ind:     {result['queueing_tail_indicator_ms']:.3f} ms\n")
+        output(f"*** Path changed:       {result['path_changed_after_recovery']}\n")
+        output(f"*** Path changed win:   {result['path_changed_during_window']}\n")
         output(f"*** Log saved to {forward_paths['log_file']}\n")
         output(f"*** JSON saved to {forward_paths['json_log_file']}\n")
         output(f"*** Persistent log:    {forward_paths['persistent_log_file']}\n")
@@ -855,6 +1144,18 @@ if __name__ == "__main__":
             output(f"*** Post-recovery RTT: {result['post_recovery_avg_rtt']:.3f} ms\n")
         if result["post_recovery_jitter_ms"] is not None:
             output(f"*** Post-recovery jitter: {result['post_recovery_jitter_ms']:.3f} ms\n")
+        if result["post_recovery_window_avg_rtt_ms"] is not None:
+            output(f"*** Window avg RTT:     {result['post_recovery_window_avg_rtt_ms']:.3f} ms\n")
+        if result["post_recovery_window_second_phase_avg_rtt_ms"] is not None:
+            output(
+                f"*** Window phase2 RTT:  {result['post_recovery_window_second_phase_avg_rtt_ms']:.3f} ms\n"
+            )
+        if result["propagation_shift_indicator_ms"] is not None:
+            output(f"*** Prop shift ind:     {result['propagation_shift_indicator_ms']:.3f} ms\n")
+        if result["queueing_tail_indicator_ms"] is not None:
+            output(f"*** Queue tail ind:     {result['queueing_tail_indicator_ms']:.3f} ms\n")
+        output(f"*** Path changed:       {result['path_changed_after_recovery']}\n")
+        output(f"*** Path changed win:   {result['path_changed_during_window']}\n")
         output(f"*** Log saved to {reverse_paths['log_file']}\n")
         output(f"*** JSON saved to {reverse_paths['json_log_file']}\n")
         output(f"*** Persistent log:    {reverse_paths['persistent_log_file']}\n")

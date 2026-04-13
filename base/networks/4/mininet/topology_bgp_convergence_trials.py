@@ -65,6 +65,14 @@ def aggregate_direction(records, direction):
         "post_recovery_jitter_ms",
         "post_recovery_p95_rtt_ms",
         "rtt_inflation_ratio",
+        "post_recovery_window_avg_rtt_ms",
+        "post_recovery_window_jitter_ms",
+        "post_recovery_window_p95_rtt_ms",
+        "post_recovery_window_first_phase_avg_rtt_ms",
+        "post_recovery_window_second_phase_avg_rtt_ms",
+        "propagation_shift_indicator_ms",
+        "queueing_tail_indicator_ms",
+        "second_phase_rtt_inflation_ratio",
     ]
 
     summary = {
@@ -89,6 +97,16 @@ def aggregate_direction(records, direction):
             "p95": percentile(values, 0.95),
             "p99": percentile(values, 0.99),
         }
+
+    changed_after = [1.0 for r in success if r.get("path_changed_after_recovery") is True]
+    changed_after_total = [r for r in success if r.get("path_changed_after_recovery") is not None]
+    if changed_after_total:
+        summary["path_changed_after_recovery_rate"] = len(changed_after) / len(changed_after_total)
+
+    changed_window = [1.0 for r in success if r.get("path_changed_during_window") is True]
+    changed_window_total = [r for r in success if r.get("path_changed_during_window") is not None]
+    if changed_window_total:
+        summary["path_changed_during_window_rate"] = len(changed_window) / len(changed_window_total)
 
     return summary
 
