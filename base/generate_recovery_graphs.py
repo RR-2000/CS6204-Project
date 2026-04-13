@@ -19,13 +19,13 @@ def plot_direction_time_metrics(data: dict, direction: str, out_dir: Path) -> Pa
         "detection_time_s",
         "blackout_duration_s",
         "convergence_time_s",
-        "bgp_sync_time_s",
+        # "bgp_sync_time_s",
     ]
     labels = [
         "Detection",
         "Blackout",
         "Convergence",
-        "BGP Sync",
+        # "BGP Sync",
     ]
 
     bgp_vals = [bgp[m] for m in metrics]
@@ -55,7 +55,7 @@ def plot_direction_time_metrics(data: dict, direction: str, out_dir: Path) -> Pa
 def plot_packet_stats(data: dict, out_dir: Path) -> Path:
     directions = ["forward", "reverse"]
     x = np.arange(len(directions))
-    width = 0.18
+    width = 0.15
 
     bgp_loss = [data[d]["bgp_only"]["packet_loss_count"] for d in directions]
     sdx_loss = [data[d]["sdx_fast"]["packet_loss_count"] for d in directions]
@@ -63,10 +63,10 @@ def plot_packet_stats(data: dict, out_dir: Path) -> Path:
     sdx_sent = [data[d]["sdx_fast"]["packets_sent"] for d in directions]
 
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.bar(x - 1.5 * width, bgp_loss, width, label="BGP loss", color="#d95f02")
-    ax.bar(x - 0.5 * width, sdx_loss, width, label="SDX loss", color="#1b9e77")
-    ax.bar(x + 0.5 * width, bgp_sent, width, label="BGP sent", color="#fc8d62")
-    ax.bar(x + 1.5 * width, sdx_sent, width, label="SDX sent", color="#66c2a5")
+    ax.bar(x - 0.5 * width, bgp_loss, width, label="BGP loss", color="#d95f02")
+    ax.bar(x - 1.5 * width, bgp_sent, width, label="BGP sent", color="#fc8d62")
+    ax.bar(x + 1.0 * width, sdx_sent, width, label="SDX sent", color="#66c2a5")
+    ax.bar(x + 2.0 * width, sdx_loss, width, label="SDX loss", color="#1b9e77")
 
     ax.set_title("Packet Loss and Packet Count by Direction")
     ax.set_ylabel("Packet Count")
@@ -143,7 +143,7 @@ def plot_delta_summary(data: dict, out_dir: Path) -> Path:
 
 
 def main() -> None:
-    base_dir = Path(__file__).resolve().parent
+    base_dir = Path(__file__).resolve().parent / "results"
     json_path = base_dir / "recovery_comparison.json"
     out_dir = base_dir / "graphs"
     out_dir.mkdir(parents=True, exist_ok=True)
