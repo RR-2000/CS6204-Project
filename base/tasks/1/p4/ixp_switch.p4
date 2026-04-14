@@ -174,18 +174,15 @@ control MyIngress(
         // idle_timeout_ns = 10000000000; // 10 seconds Not supported in this format
     }
 
-    table route_alteration {
+    table fast_failover {
         key = {
-            hdr.ipv4.srcAddr: ternary;
-            hdr.ipv4.dstAddr: ternary;
-            hdr.ipv4.protocol: ternary;
-            meta.l4_src: ternary;
-            meta.l4_dst: ternary;
+            meta.ingress_port: exact;
+            hdr.ethernet.dstAddr: exact;
         }
         actions = {
             set_route_override;
         }
-        size = 1024;
+        size = 32;
     }
 
     apply {
@@ -203,14 +200,7 @@ control MyIngress(
             meta.l4_dst = 0;
         }
         
-        bool override_hit = false;
-
-        // Route override logic
-        if (hdr.ipv4.isValid()) {
-             if (route_alteration.apply().hit) {
-                 override_hit = true;
-             }
-        }
+        bool override_hit = fast_failover.apply().hit;
 
         // Send a clone of every ingress packet (except CPU) to the controller for learning and filter out invalid src MACs
         if (standard_metadata.ingress_port != CPU_PORT &&

@@ -360,7 +360,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "tasks/1/p4/ixp_switch.p4",
-        "line" : 259,
+        "line" : 249,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -544,7 +544,7 @@
       ]
     },
     {
-      "name" : "ixp_switch196",
+      "name" : "ixp_switch193",
       "id" : 6,
       "runtime_data" : [],
       "primitives" : [
@@ -562,7 +562,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 196,
+            "line" : 193,
             "column" : 12,
             "source_fragment" : "meta.l4_src = hdr.tcp.srcPort"
           }
@@ -581,7 +581,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 197,
+            "line" : 194,
             "column" : 12,
             "source_fragment" : "meta.l4_dst = hdr.tcp.dstPort"
           }
@@ -589,7 +589,7 @@
       ]
     },
     {
-      "name" : "ixp_switch199",
+      "name" : "ixp_switch196",
       "id" : 7,
       "runtime_data" : [],
       "primitives" : [
@@ -607,7 +607,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 199,
+            "line" : 196,
             "column" : 12,
             "source_fragment" : "meta.l4_src = hdr.udp.srcPort"
           }
@@ -626,7 +626,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 200,
+            "line" : 197,
             "column" : 12,
             "source_fragment" : "meta.l4_dst = hdr.udp.dstPort"
           }
@@ -634,7 +634,7 @@
       ]
     },
     {
-      "name" : "ixp_switch202",
+      "name" : "ixp_switch199",
       "id" : 8,
       "runtime_data" : [],
       "primitives" : [
@@ -652,7 +652,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 202,
+            "line" : 199,
             "column" : 12,
             "source_fragment" : "meta.l4_src = 0"
           }
@@ -671,7 +671,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 203,
+            "line" : 200,
             "column" : 12,
             "source_fragment" : "meta.l4_dst = 0"
           }
@@ -679,7 +679,7 @@
       ]
     },
     {
-      "name" : "ixp_switch192",
+      "name" : "ixp_switch189",
       "id" : 9,
       "runtime_data" : [],
       "primitives" : [
@@ -697,7 +697,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 192,
+            "line" : 189,
             "column" : 8,
             "source_fragment" : "standard_metadata.mcast_grp = 0"
           }
@@ -705,7 +705,7 @@
       ]
     },
     {
-      "name" : "ixp_switch211",
+      "name" : "act",
       "id" : 10,
       "runtime_data" : [],
       "primitives" : [
@@ -730,18 +730,12 @@
                 }
               }
             }
-          ],
-          "source_info" : {
-            "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 211,
-            "column" : 17,
-            "source_fragment" : "override_hit = true"
-          }
+          ]
         }
       ]
     },
     {
-      "name" : "ixp_switch206",
+      "name" : "act_0",
       "id" : 11,
       "runtime_data" : [],
       "primitives" : [
@@ -766,18 +760,12 @@
                 }
               }
             }
-          ],
-          "source_info" : {
-            "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 206,
-            "column" : 8,
-            "source_fragment" : "bool override_hit = false"
-          }
+          ]
         }
       ]
     },
     {
-      "name" : "ixp_switch241",
+      "name" : "ixp_switch231",
       "id" : 12,
       "runtime_data" : [],
       "primitives" : [
@@ -791,7 +779,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 241,
+            "line" : 231,
             "column" : 12,
             "source_fragment" : "hdr.cpu.setValid()"
           }
@@ -810,7 +798,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 242,
+            "line" : 232,
             "column" : 12,
             "source_fragment" : "hdr.cpu.ingress_port = meta.ingress_port"
           }
@@ -818,7 +806,7 @@
       ]
     },
     {
-      "name" : "ixp_switch247",
+      "name" : "ixp_switch237",
       "id" : 13,
       "runtime_data" : [],
       "primitives" : [
@@ -832,7 +820,7 @@
           ],
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 247,
+            "line" : 237,
             "column" : 12,
             "source_fragment" : "mark_to_drop(standard_metadata)"
           }
@@ -850,14 +838,14 @@
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
-      "init_table" : "tbl_ixp_switch192",
+      "init_table" : "tbl_ixp_switch189",
       "tables" : [
         {
-          "name" : "tbl_ixp_switch192",
+          "name" : "tbl_ixp_switch189",
           "id" : 0,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 192,
+            "line" : 189,
             "column" : 36,
             "source_fragment" : "="
           },
@@ -869,10 +857,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [9],
-          "actions" : ["ixp_switch192"],
+          "actions" : ["ixp_switch189"],
           "base_default_next" : "node_3",
           "next_tables" : {
-            "ixp_switch192" : "node_3"
+            "ixp_switch189" : "node_3"
           },
           "default_entry" : {
             "action_id" : 9,
@@ -882,11 +870,11 @@
           }
         },
         {
-          "name" : "tbl_ixp_switch196",
+          "name" : "tbl_ixp_switch193",
           "id" : 1,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 196,
+            "line" : 193,
             "column" : 24,
             "source_fragment" : "= hdr.tcp.srcPort; ..."
           },
@@ -898,10 +886,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [6],
-          "actions" : ["ixp_switch196"],
-          "base_default_next" : "tbl_ixp_switch206",
+          "actions" : ["ixp_switch193"],
+          "base_default_next" : "MyIngress.fast_failover",
           "next_tables" : {
-            "ixp_switch196" : "tbl_ixp_switch206"
+            "ixp_switch193" : "MyIngress.fast_failover"
           },
           "default_entry" : {
             "action_id" : 6,
@@ -911,11 +899,11 @@
           }
         },
         {
-          "name" : "tbl_ixp_switch199",
+          "name" : "tbl_ixp_switch196",
           "id" : 2,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 199,
+            "line" : 196,
             "column" : 24,
             "source_fragment" : "= hdr.udp.srcPort; ..."
           },
@@ -927,10 +915,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [7],
-          "actions" : ["ixp_switch199"],
-          "base_default_next" : "tbl_ixp_switch206",
+          "actions" : ["ixp_switch196"],
+          "base_default_next" : "MyIngress.fast_failover",
           "next_tables" : {
-            "ixp_switch199" : "tbl_ixp_switch206"
+            "ixp_switch196" : "MyIngress.fast_failover"
           },
           "default_entry" : {
             "action_id" : 7,
@@ -940,11 +928,11 @@
           }
         },
         {
-          "name" : "tbl_ixp_switch202",
+          "name" : "tbl_ixp_switch199",
           "id" : 3,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 202,
+            "line" : 199,
             "column" : 24,
             "source_fragment" : "= 0; ..."
           },
@@ -956,10 +944,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [8],
-          "actions" : ["ixp_switch202"],
-          "base_default_next" : "tbl_ixp_switch206",
+          "actions" : ["ixp_switch199"],
+          "base_default_next" : "MyIngress.fast_failover",
           "next_tables" : {
-            "ixp_switch202" : "tbl_ixp_switch206"
+            "ixp_switch199" : "MyIngress.fast_failover"
           },
           "default_entry" : {
             "action_id" : 8,
@@ -969,78 +957,31 @@
           }
         },
         {
-          "name" : "tbl_ixp_switch206",
+          "name" : "MyIngress.fast_failover",
           "id" : 4,
-          "source_info" : {
-            "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 206,
-            "column" : 8,
-            "source_fragment" : "bool override_hit = false"
-          },
-          "key" : [],
-          "match_type" : "exact",
-          "type" : "simple",
-          "max_size" : 1024,
-          "with_counters" : false,
-          "support_timeout" : false,
-          "direct_meters" : null,
-          "action_ids" : [11],
-          "actions" : ["ixp_switch206"],
-          "base_default_next" : "node_9",
-          "next_tables" : {
-            "ixp_switch206" : "node_9"
-          },
-          "default_entry" : {
-            "action_id" : 11,
-            "action_const" : true,
-            "action_data" : [],
-            "action_entry_const" : true
-          }
-        },
-        {
-          "name" : "MyIngress.route_alteration",
-          "id" : 5,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
             "line" : 177,
             "column" : 10,
-            "source_fragment" : "route_alteration"
+            "source_fragment" : "fast_failover"
           },
           "key" : [
             {
-              "match_type" : "ternary",
-              "name" : "hdr.ipv4.srcAddr",
-              "target" : ["ipv4", "srcAddr"],
+              "match_type" : "exact",
+              "name" : "meta.ingress_port",
+              "target" : ["scalars", "metadata.ingress_port"],
               "mask" : null
             },
             {
-              "match_type" : "ternary",
-              "name" : "hdr.ipv4.dstAddr",
-              "target" : ["ipv4", "dstAddr"],
-              "mask" : null
-            },
-            {
-              "match_type" : "ternary",
-              "name" : "hdr.ipv4.protocol",
-              "target" : ["ipv4", "protocol"],
-              "mask" : null
-            },
-            {
-              "match_type" : "ternary",
-              "name" : "meta.l4_src",
-              "target" : ["scalars", "metadata.l4_src"],
-              "mask" : null
-            },
-            {
-              "match_type" : "ternary",
-              "name" : "meta.l4_dst",
-              "target" : ["scalars", "metadata.l4_dst"],
+              "match_type" : "exact",
+              "name" : "hdr.ethernet.dstAddr",
+              "target" : ["ethernet", "dstAddr"],
               "mask" : null
             }
           ],
-          "match_type" : "ternary",
+          "match_type" : "exact",
           "type" : "simple",
-          "max_size" : 1024,
+          "max_size" : 32,
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
@@ -1048,8 +989,8 @@
           "actions" : ["MyIngress.set_route_override", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
-            "__HIT__" : "tbl_ixp_switch211",
-            "__MISS__" : "node_12"
+            "__HIT__" : "tbl_act",
+            "__MISS__" : "tbl_act_0"
           },
           "default_entry" : {
             "action_id" : 0,
@@ -1059,14 +1000,8 @@
           }
         },
         {
-          "name" : "tbl_ixp_switch211",
-          "id" : 6,
-          "source_info" : {
-            "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 211,
-            "column" : 30,
-            "source_fragment" : "="
-          },
+          "name" : "tbl_act",
+          "id" : 5,
           "key" : [],
           "match_type" : "exact",
           "type" : "simple",
@@ -1075,13 +1010,36 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [10],
-          "actions" : ["ixp_switch211"],
-          "base_default_next" : "node_12",
+          "actions" : ["act"],
+          "base_default_next" : "node_11",
           "next_tables" : {
-            "ixp_switch211" : "node_12"
+            "act" : "node_11"
           },
           "default_entry" : {
             "action_id" : 10,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_act_0",
+          "id" : 6,
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [11],
+          "actions" : ["act_0"],
+          "base_default_next" : "node_11",
+          "next_tables" : {
+            "act_0" : "node_11"
+          },
+          "default_entry" : {
+            "action_id" : 11,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
@@ -1092,7 +1050,7 @@
           "id" : 7,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 218,
+            "line" : 208,
             "column" : 12,
             "source_fragment" : "send_to_controller()"
           },
@@ -1105,9 +1063,9 @@
           "direct_meters" : null,
           "action_ids" : [4],
           "actions" : ["MyIngress.send_to_controller"],
-          "base_default_next" : "node_14",
+          "base_default_next" : "node_13",
           "next_tables" : {
-            "MyIngress.send_to_controller" : "node_14"
+            "MyIngress.send_to_controller" : "node_13"
           },
           "default_entry" : {
             "action_id" : 4,
@@ -1121,7 +1079,7 @@
           "id" : 8,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 224,
+            "line" : 214,
             "column" : 16,
             "source_fragment" : "flood()"
           },
@@ -1190,7 +1148,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 195,
+            "line" : 192,
             "column" : 12,
             "source_fragment" : "hdr.tcp.isValid()"
           },
@@ -1205,7 +1163,7 @@
               }
             }
           },
-          "true_next" : "tbl_ixp_switch196",
+          "true_next" : "tbl_ixp_switch193",
           "false_next" : "node_5"
         },
         {
@@ -1213,7 +1171,7 @@
           "id" : 1,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 198,
+            "line" : 195,
             "column" : 19,
             "source_fragment" : "hdr.udp.isValid()"
           },
@@ -1228,38 +1186,15 @@
               }
             }
           },
-          "true_next" : "tbl_ixp_switch199",
-          "false_next" : "tbl_ixp_switch202"
+          "true_next" : "tbl_ixp_switch196",
+          "false_next" : "tbl_ixp_switch199"
         },
         {
-          "name" : "node_9",
+          "name" : "node_11",
           "id" : 2,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 209,
-            "column" : 12,
-            "source_fragment" : "hdr.ipv4.isValid()"
-          },
-          "expression" : {
-            "type" : "expression",
-            "value" : {
-              "op" : "d2b",
-              "left" : null,
-              "right" : {
-                "type" : "field",
-                "value" : ["ipv4", "$valid$"]
-              }
-            }
-          },
-          "true_next" : "MyIngress.route_alteration",
-          "false_next" : "node_12"
-        },
-        {
-          "name" : "node_12",
-          "id" : 3,
-          "source_info" : {
-            "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 216,
+            "line" : 206,
             "column" : 12,
             "source_fragment" : "standard_metadata.ingress_port != CPU_PORT && ..."
           },
@@ -1298,14 +1233,14 @@
             }
           },
           "true_next" : "tbl_send_to_controller",
-          "false_next" : "node_14"
+          "false_next" : "node_13"
         },
         {
-          "name" : "node_14",
-          "id" : 4,
+          "name" : "node_13",
+          "id" : 3,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 221,
+            "line" : 211,
             "column" : 13,
             "source_fragment" : "override_hit"
           },
@@ -1321,14 +1256,14 @@
             }
           },
           "true_next" : null,
-          "false_next" : "node_15"
+          "false_next" : "node_14"
         },
         {
-          "name" : "node_15",
-          "id" : 5,
+          "name" : "node_14",
+          "id" : 4,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 223,
+            "line" : 213,
             "column" : 16,
             "source_fragment" : "hdr.ethernet.dstAddr == 0xFFFFFFFFFFFF"
           },
@@ -1356,18 +1291,18 @@
       "id" : 1,
       "source_info" : {
         "filename" : "tasks/1/p4/ixp_switch.p4",
-        "line" : 233,
+        "line" : 223,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
-      "init_table" : "node_20",
+      "init_table" : "node_19",
       "tables" : [
         {
-          "name" : "tbl_ixp_switch241",
+          "name" : "tbl_ixp_switch231",
           "id" : 10,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 241,
+            "line" : 231,
             "column" : 12,
             "source_fragment" : "hdr.cpu.setValid(); ..."
           },
@@ -1379,10 +1314,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [12],
-          "actions" : ["ixp_switch241"],
-          "base_default_next" : "node_22",
+          "actions" : ["ixp_switch231"],
+          "base_default_next" : "node_21",
           "next_tables" : {
-            "ixp_switch241" : "node_22"
+            "ixp_switch231" : "node_21"
           },
           "default_entry" : {
             "action_id" : 12,
@@ -1392,11 +1327,11 @@
           }
         },
         {
-          "name" : "tbl_ixp_switch247",
+          "name" : "tbl_ixp_switch237",
           "id" : 11,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 247,
+            "line" : 237,
             "column" : 12,
             "source_fragment" : "mark_to_drop(standard_metadata)"
           },
@@ -1408,10 +1343,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [13],
-          "actions" : ["ixp_switch247"],
+          "actions" : ["ixp_switch237"],
           "base_default_next" : null,
           "next_tables" : {
-            "ixp_switch247" : null
+            "ixp_switch237" : null
           },
           "default_entry" : {
             "action_id" : 13,
@@ -1424,11 +1359,11 @@
       "action_profiles" : [],
       "conditionals" : [
         {
-          "name" : "node_20",
-          "id" : 6,
+          "name" : "node_19",
+          "id" : 5,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 240,
+            "line" : 230,
             "column" : 12,
             "source_fragment" : "standard_metadata.egress_port == CPU_PORT"
           },
@@ -1446,15 +1381,15 @@
               }
             }
           },
-          "true_next" : "tbl_ixp_switch241",
-          "false_next" : "node_22"
+          "true_next" : "tbl_ixp_switch231",
+          "false_next" : "node_21"
         },
         {
-          "name" : "node_22",
-          "id" : 7,
+          "name" : "node_21",
+          "id" : 6,
           "source_info" : {
             "filename" : "tasks/1/p4/ixp_switch.p4",
-            "line" : 246,
+            "line" : 236,
             "column" : 12,
             "source_fragment" : "standard_metadata.mcast_grp == 1 && standard_metadata.egress_port == standard_metadata.ingress_port"
           },
@@ -1493,7 +1428,7 @@
             }
           },
           "false_next" : null,
-          "true_next" : "tbl_ixp_switch247"
+          "true_next" : "tbl_ixp_switch237"
         }
       ]
     }
