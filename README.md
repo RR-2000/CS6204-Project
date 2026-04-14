@@ -29,52 +29,139 @@ Current experiment goals:
 - BGP policy prefers `AS2` for `AS1 -> AS4`
 - BGP policy prefers `AS3` for `AS4 -> AS1`
 
-## Run
+## Setup
 
-From [base](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base):
-
-`BGP-only`:
+Run commands from `base/`:
 
 ```bash
+cd base
+```
+
+The Makefile uses `PYTHON_INTERPRETER = /opt/p4/p4dev-python-venv/bin/python3`.
+
+If plotting dependencies are missing, install them in the same Python environment used for plotting:
+
+```bash
+pip install matplotlib numpy
+```
+
+## Task Instructions (All 4 Tasks)
+
+Each task has build + interactive run targets:
+
+```bash
+make build-task-1 && make run-task-1
+make build-task-2 && make run-task-2
+make build-task-3 && make run-task-3
+make build-task-4 && make run-task-4
+```
+
+Convergence experiment targets (BGP-only, SDX, compare) are available for all 4 tasks:
+
+```bash
+# Task 1
 make run-convergence-1
-```
-
-`SDX fast recovery`:
-
-```bash
 make run-sdx-convergence-1
+make run-compare-1
+
+# Task 2
+make run-convergence-2
+make run-sdx-convergence-2
+make run-compare-2
+
+# Task 3
+make run-convergence-3
+make run-sdx-convergence-3
+make run-compare-3
+
+# Task 4
+make run-convergence-4
+make run-sdx-convergence-4
+make run-compare-4
 ```
 
-`Run both and generate a comparison`:
+Task 4 multi-trial mode (optional):
 
 ```bash
-make run-compare-1
+make TRIALS=5 run-convergence-4-trials
+make TRIALS=5 run-sdx-convergence-4-trials
+make run-compare-4-trials
 ```
 
-## Output
+Useful cleanup target:
 
-Successful runs save metrics to:
+```bash
+make run-stop
+```
 
-- [bgp_convergence.log](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.log)
-- [bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/bgp_convergence.json)
-- [sdx_convergence.log](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.log)
-- [sdx_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/temp/sdx_convergence.json)
+## Comparison Outputs
 
-Persistent copies for comparison are saved to:
+Comparison scripts write outputs under `base/results/`:
 
-- [base/results/bgp_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/bgp_convergence.json)
-- [base/results/sdx_convergence.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/sdx_convergence.json)
-- [base/results/recovery_comparison.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/recovery_comparison.md)
-- [base/results/recovery_comparison.json](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/results/recovery_comparison.json)
+- `recovery_comparison.json`
+- `recovery_comparison.md`
 
-Recorded metrics include:
+Task 1 compare uses `compare_recovery_results.py` (single-direction schema).
 
-- detection time
-- blackout duration
-- traffic recovery time
-- BGP sync time
-- packet loss count
-- average RTT over the first few successful pings after recovery
+Tasks 2/3/4 compare use `compare_recovery_results_2_way.py` (forward + reverse schema).
+
+## Graph Generation Scripts
+
+There are two plotting scripts:
+
+### 1) Quick graph set
+
+Script: `base/generate_recovery_graphs.py`
+
+Reads:
+
+- `base/results/recovery_comparison.json`
+
+Writes:
+
+- `base/results/graphs/forward_timing_comparison.png`
+- `base/results/graphs/reverse_timing_comparison.png`
+- `base/results/graphs/packet_comparison.png`
+- `base/results/graphs/rtt_comparison.png`
+- `base/results/graphs/delta_summary.png`
+
+Run:
+
+```bash
+python generate_recovery_graphs.py
+```
+
+### 2) Extended analysis graph set
+
+Script: `base/plot_recovery_experiments.py`
+
+Supports richer metrics, timelines, CDFs, combined RTT views, and SDX advantage summary.
+
+Run (explicit output directory):
+
+```bash
+python plot_recovery_experiments.py --input results/recovery_comparison.json --outdir results/recovery_plots
+```
+
+Run (timestamped output directory auto-created):
+
+```bash
+python plot_recovery_experiments.py --input results/recovery_comparison.json
+```
+
+Typical outputs in `results/recovery_plots*/`:
+
+- `forward_core_recovery.png`, `reverse_core_recovery.png`
+- `forward_reliability.png`, `reverse_reliability.png`
+- `forward_latency_summary.png`, `reverse_latency_summary.png`
+- `forward_probe_timeline.png`, `reverse_probe_timeline.png`
+- `forward_window_rtt_timeseries.png`, `reverse_window_rtt_timeseries.png`
+- `forward_window_rtt_cdf.png`, `reverse_window_rtt_cdf.png`
+- `forward_combined_rtt_timeline.png`, `reverse_combined_rtt_timeline.png`
+- `forward_combined_rtt_summary.png`, `reverse_combined_rtt_summary.png`
+- `sdx_advantage_metrics.png`
+- `report.md`
+- `summary.json`
 
 ## Implementation Notes
 
