@@ -24,7 +24,7 @@ def plot_direction_time_metrics(data: dict, direction: str, out_dir: Path) -> Pa
     labels = [
         "Detection",
         "Blackout",
-        "Convergence",
+        "Recovery",
         # "BGP Sync",
     ]
 
