@@ -1,0 +1,416 @@
+{
+  "test_time": "2026-04-13 15:47:39",
+  "mode": "bgp",
+  "trials_requested": 5,
+  "artifacts": [
+    {
+      "trial": 1,
+      "runner_rc": 0,
+      "runner_elapsed_s": 150.993,
+      "forward_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_01.json",
+      "reverse_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_01.json",
+      "forward_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_01.log",
+      "reverse_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_01.log"
+    },
+    {
+      "trial": 2,
+      "runner_rc": 0,
+      "runner_elapsed_s": 149.829,
+      "forward_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_02.json",
+      "reverse_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_02.json",
+      "forward_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_02.log",
+      "reverse_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_02.log"
+    },
+    {
+      "trial": 3,
+      "runner_rc": 0,
+      "runner_elapsed_s": 150.922,
+      "forward_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_03.json",
+      "reverse_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_03.json",
+      "forward_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_03.log",
+      "reverse_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_03.log"
+    },
+    {
+      "trial": 4,
+      "runner_rc": 0,
+      "runner_elapsed_s": 149.818,
+      "forward_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_04.json",
+      "reverse_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_04.json",
+      "forward_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_04.log",
+      "reverse_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_04.log"
+    },
+    {
+      "trial": 5,
+      "runner_rc": 0,
+      "runner_elapsed_s": 149.87,
+      "forward_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_05.json",
+      "reverse_json": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_05.json",
+      "forward_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_forward_trial_05.log",
+      "reverse_log": "/mnt/hgfs/ANet/CS6204-Project/base/results/bgp_convergence_reverse_trial_05.log"
+    }
+  ],
+  "forward": {
+    "direction": "forward",
+    "trials_total": 5,
+    "trials_success": 5,
+    "trials_failed": 0,
+    "success_rate": 1.0,
+    "metrics": {
+      "detection_time_s": {
+        "min": 1.0,
+        "max": 1.01,
+        "mean": 1.008,
+        "p50": 1.01,
+        "p90": 1.01,
+        "p95": 1.01,
+        "p99": 1.01
+      },
+      "blackout_duration_s": {
+        "min": 7.39,
+        "max": 8.46,
+        "mean": 7.8180000000000005,
+        "p50": 7.4,
+        "p90": 8.456,
+        "p95": 8.458,
+        "p99": 8.459600000000002
+      },
+      "convergence_time_s": {
+        "min": 8.4,
+        "max": 9.46,
+        "mean": 8.824000000000002,
+        "p50": 8.4,
+        "p90": 9.46,
+        "p95": 9.46,
+        "p99": 9.46
+      },
+      "stable_convergence_time_s": {
+        "min": 8.52,
+        "max": 9.59,
+        "mean": 8.947999999999999,
+        "p50": 8.52,
+        "p90": 9.59,
+        "p95": 9.59,
+        "p99": 9.59
+      },
+      "bgp_sync_time_s": {
+        "min": 2.03,
+        "max": 2.04,
+        "mean": 2.036,
+        "p50": 2.04,
+        "p90": 2.04,
+        "p95": 2.04,
+        "p99": 2.04
+      },
+      "control_data_plane_skew_s": {
+        "min": -7.55,
+        "max": -6.48,
+        "mean": -6.912000000000001,
+        "p50": -6.49,
+        "p90": -6.484,
+        "p95": -6.482,
+        "p99": -6.4804
+      },
+      "packet_loss_count": {
+        "min": 8,
+        "max": 9,
+        "mean": 8.4,
+        "p50": 8.0,
+        "p90": 9.0,
+        "p95": 9.0,
+        "p99": 9.0
+      },
+      "post_recovery_avg_rtt_ms": {
+        "min": 7.072,
+        "max": 9.732,
+        "mean": 7.982200000000001,
+        "p50": 7.35,
+        "p90": 9.226,
+        "p95": 9.479,
+        "p99": 9.681399999999998
+      },
+      "post_recovery_jitter_ms": {
+        "min": 1.054,
+        "max": 3.719,
+        "mean": 2.1434,
+        "p50": 1.951,
+        "p90": 3.3522,
+        "p95": 3.5355999999999996,
+        "p99": 3.68232
+      },
+      "post_recovery_p95_rtt_ms": {
+        "min": 9.856,
+        "max": 15.022,
+        "mean": 11.8854,
+        "p50": 11.462,
+        "p90": 14.2684,
+        "p95": 14.6452,
+        "p99": 14.94664
+      },
+      "rtt_inflation_ratio": {
+        "min": 0.761,
+        "max": 1.243,
+        "mean": 1.028,
+        "p50": 1.093,
+        "p90": 1.2046000000000001,
+        "p95": 1.2238,
+        "p99": 1.2391600000000003
+      },
+      "post_recovery_window_avg_rtt_ms": {
+        "min": 8.511,
+        "max": 9.259,
+        "mean": 8.8966,
+        "p50": 8.908,
+        "p90": 9.1698,
+        "p95": 9.2144,
+        "p99": 9.25008
+      },
+      "post_recovery_window_jitter_ms": {
+        "min": 2.063,
+        "max": 3.304,
+        "mean": 2.8571999999999997,
+        "p50": 3.24,
+        "p90": 3.2896,
+        "p95": 3.2967999999999997,
+        "p99": 3.3025599999999997
+      },
+      "post_recovery_window_p95_rtt_ms": {
+        "min": 10.586,
+        "max": 11.563,
+        "mean": 11.0536,
+        "p50": 11.073,
+        "p90": 11.438600000000001,
+        "p95": 11.500800000000002,
+        "p99": 11.55056
+      },
+      "post_recovery_window_first_phase_avg_rtt_ms": {
+        "min": 8.133,
+        "max": 9.542,
+        "mean": 8.8414,
+        "p50": 8.968,
+        "p90": 9.346,
+        "p95": 9.443999999999999,
+        "p99": 9.5224
+      },
+      "post_recovery_window_second_phase_avg_rtt_ms": {
+        "min": 8.511,
+        "max": 9.54,
+        "mean": 8.9508,
+        "p50": 8.77,
+        "p90": 9.478,
+        "p95": 9.509,
+        "p99": 9.5338
+      },
+      "propagation_shift_indicator_ms": {
+        "min": -0.242,
+        "max": 2.0,
+        "mean": 0.7976,
+        "p50": 0.685,
+        "p90": 1.5692000000000002,
+        "p95": 1.7845999999999997,
+        "p99": 1.95692
+      },
+      "queueing_tail_indicator_ms": {
+        "min": 2.179,
+        "max": 3.088,
+        "mean": 2.5989999999999998,
+        "p50": 2.453,
+        "p90": 3.042,
+        "p95": 3.0650000000000004,
+        "p99": 3.0834
+      },
+      "second_phase_rtt_inflation_ratio": {
+        "min": 0.892,
+        "max": 1.419,
+        "mean": 1.1562000000000001,
+        "p50": 1.12,
+        "p90": 1.3602,
+        "p95": 1.3896,
+        "p99": 1.41312
+      }
+    },
+    "path_changed_after_recovery_rate": 0.0,
+    "path_changed_during_window_rate": 0.0
+  },
+  "reverse": {
+    "direction": "reverse",
+    "trials_total": 5,
+    "trials_success": 5,
+    "trials_failed": 0,
+    "success_rate": 1.0,
+    "metrics": {
+      "detection_time_s": {
+        "min": 1.01,
+        "max": 1.01,
+        "mean": 1.01,
+        "p50": 1.01,
+        "p90": 1.01,
+        "p95": 1.01,
+        "p99": 1.01
+      },
+      "blackout_duration_s": {
+        "min": 8.44,
+        "max": 8.45,
+        "mean": 8.443999999999999,
+        "p50": 8.44,
+        "p90": 8.45,
+        "p95": 8.45,
+        "p99": 8.45
+      },
+      "convergence_time_s": {
+        "min": 9.45,
+        "max": 9.46,
+        "mean": 9.453999999999999,
+        "p50": 9.45,
+        "p90": 9.46,
+        "p95": 9.46,
+        "p99": 9.46
+      },
+      "stable_convergence_time_s": {
+        "min": 9.57,
+        "max": 9.58,
+        "mean": 9.574000000000002,
+        "p50": 9.57,
+        "p90": 9.58,
+        "p95": 9.58,
+        "p99": 9.58
+      },
+      "bgp_sync_time_s": {
+        "min": 2.03,
+        "max": 2.04,
+        "mean": 2.034,
+        "p50": 2.03,
+        "p90": 2.04,
+        "p95": 2.04,
+        "p99": 2.04
+      },
+      "control_data_plane_skew_s": {
+        "min": -7.54,
+        "max": -7.53,
+        "mean": -7.537999999999999,
+        "p50": -7.54,
+        "p90": -7.534,
+        "p95": -7.532,
+        "p99": -7.5304
+      },
+      "packet_loss_count": {
+        "min": 9,
+        "max": 9,
+        "mean": 9.0,
+        "p50": 9.0,
+        "p90": 9.0,
+        "p95": 9.0,
+        "p99": 9.0
+      },
+      "post_recovery_avg_rtt_ms": {
+        "min": 7.677,
+        "max": 16.13,
+        "mean": 9.761199999999999,
+        "p50": 8.034,
+        "p90": 13.2736,
+        "p95": 14.701799999999999,
+        "p99": 15.844359999999998
+      },
+      "post_recovery_jitter_ms": {
+        "min": 0.703,
+        "max": 9.796,
+        "mean": 2.7605999999999997,
+        "p50": 0.809,
+        "p90": 6.5536,
+        "p95": 8.174799999999998,
+        "p99": 9.47176
+      },
+      "post_recovery_p95_rtt_ms": {
+        "min": 8.463,
+        "max": 27.544,
+        "mean": 12.960399999999998,
+        "p50": 9.061,
+        "p90": 20.9172,
+        "p95": 24.2306,
+        "p99": 26.88132
+      },
+      "rtt_inflation_ratio": {
+        "min": 0.917,
+        "max": 1.793,
+        "mean": 1.1836,
+        "p50": 1.073,
+        "p90": 1.517,
+        "p95": 1.6549999999999998,
+        "p99": 1.7653999999999999
+      },
+      "post_recovery_window_avg_rtt_ms": {
+        "min": 8.929,
+        "max": 9.547,
+        "mean": 9.1752,
+        "p50": 9.062,
+        "p90": 9.467400000000001,
+        "p95": 9.507200000000001,
+        "p99": 9.53904
+      },
+      "post_recovery_window_jitter_ms": {
+        "min": 1.799,
+        "max": 3.52,
+        "mean": 2.909,
+        "p50": 3.29,
+        "p90": 3.4332000000000003,
+        "p95": 3.4766,
+        "p99": 3.51132
+      },
+      "post_recovery_window_p95_rtt_ms": {
+        "min": 11.374,
+        "max": 12.519,
+        "mean": 12.034,
+        "p50": 12.291,
+        "p90": 12.429400000000001,
+        "p95": 12.4742,
+        "p99": 12.51004
+      },
+      "post_recovery_window_first_phase_avg_rtt_ms": {
+        "min": 8.898,
+        "max": 9.543,
+        "mean": 9.242,
+        "p50": 9.185,
+        "p90": 9.500599999999999,
+        "p95": 9.521799999999999,
+        "p99": 9.53876
+      },
+      "post_recovery_window_second_phase_avg_rtt_ms": {
+        "min": 8.455,
+        "max": 9.934,
+        "mean": 9.1102,
+        "p50": 8.959,
+        "p90": 9.7624,
+        "p95": 9.8482,
+        "p99": 9.916839999999999
+      },
+      "propagation_shift_indicator_ms": {
+        "min": 0.649,
+        "max": 0.856,
+        "mean": 0.7454,
+        "p50": 0.722,
+        "p90": 0.842,
+        "p95": 0.849,
+        "p99": 0.8545999999999999
+      },
+      "queueing_tail_indicator_ms": {
+        "min": 2.541,
+        "max": 3.744,
+        "mean": 3.3524000000000003,
+        "p50": 3.481,
+        "p90": 3.7432,
+        "p95": 3.7436000000000003,
+        "p99": 3.74392
+      },
+      "second_phase_rtt_inflation_ratio": {
+        "min": 0.996,
+        "max": 1.194,
+        "mean": 1.1206,
+        "p50": 1.135,
+        "p90": 1.1904,
+        "p95": 1.1922,
+        "p99": 1.19364
+      }
+    },
+    "path_changed_after_recovery_rate": 0.0,
+    "path_changed_during_window_rate": 0.0
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "input": "C:\\Users\\admin\\Desktop\\Coursework\\ANet\\CS6204-Project\\base\\results\\recovery_comparison.json",
+  "output_dir": "results\\recovery_plots",
+  "plots_generated": [
+    "forward_core_recovery.png",
+    "forward_reliability.png",
+    "forward_latency_summary.png",
+    "forward_probe_timeline.png",
+    "forward_window_rtt_timeseries.png",
+    "forward_window_rtt_cdf.png",
+    "forward_combined_rtt_timeline.png",
+    "forward_combined_rtt_summary.png",
+    "forward_delta_sdx_minus_bgp.png",
+    "reverse_core_recovery.png",
+    "reverse_reliability.png",
+    "reverse_latency_summary.png",
+    "reverse_probe_timeline.png",
+    "reverse_window_rtt_timeseries.png",
+    "reverse_window_rtt_cdf.png",
+    "reverse_combined_rtt_timeline.png",
+    "reverse_combined_rtt_summary.png",
+    "reverse_delta_sdx_minus_bgp.png",
+    "sdx_advantage_metrics.png"
+  ],
+  "report": "report.md"
+}

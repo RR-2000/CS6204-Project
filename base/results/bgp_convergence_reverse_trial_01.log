@@ -1,0 +1,32 @@
+BGP_ONLY Recovery Test
+========================================
+Test time: 2026-04-13 15:37:37
+Mode:      BGP_ONLY
+Ping:      as4h1 -> 10.1.0.101
+
+Result: SUCCESS
+Link failed:          as2r1-eth1 and as2r1-eth2 administratively down
+Detection time:       1.01s
+Blackout duration:    8.44s
+Convergence time:     9.45s
+Stable convergence:   9.57s
+BGP sync time:        2.03s
+Ctrl/Data skew:       -7.54s
+Packet loss count:    9
+Packets sent:         12
+Longest loss burst:   9 packets (0.45s)
+Recovery flaps:       1
+Recovery success:     27.27%
+First success lag:    8.44s
+Stability window:     0.12s
+Baseline RTT:         7.733 ms
+Post-recovery RTT:    7.976 ms
+Post-recovery jitter: 0.809 ms
+Post-recovery p95:    9.061 ms
+RTT inflation:        1.032x
+Window avg RTT:       8.990 ms
+Window phase2 RTT:    8.455 ms
+Prop shift indicator: 0.722 ms
+Queue tail indicator: 3.744 ms
+Path changed:         False
+Path changed in win:  False
