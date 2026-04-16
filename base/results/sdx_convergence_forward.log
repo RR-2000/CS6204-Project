@@ -1,6 +1,6 @@
 SDX_FAST Recovery Test
 ========================================
-Test time: 2026-04-13 15:57:48
+Test time: 2026-04-16 12:35:17
 Mode:      SDX_FAST
 Ping:      as1h1 -> 10.4.0.101
 
@@ -8,9 +8,9 @@ Result: SUCCESS
 Link failed:          as2r1-eth1 and as2r1-eth2 administratively down
 Detection time:       1.00s
 Blackout duration:    0.00s
-Convergence time:     1.00s
-Stable convergence:   1.14s
-BGP sync time:        1.03s
+Convergence time:     1.01s
+Stable convergence:   1.15s
+BGP sync time:        1.04s
 Ctrl/Data skew:       -0.11s
 Packet loss count:    1
 Packets sent:         4
@@ -18,15 +18,15 @@ Longest loss burst:   1 packets (0.05s)
 Recovery flaps:       0
 Recovery success:     100.00%
 First success lag:    0.00s
-Stability window:     0.14s
-Baseline RTT:         8.336 ms
-Post-recovery RTT:    7.963 ms
-Post-recovery jitter: 1.389 ms
-Post-recovery p95:    9.594 ms
-RTT inflation:        0.955x
-Window avg RTT:       8.072 ms
-Window phase2 RTT:    8.084 ms
-Prop shift indicator: 0.000 ms
-Queue tail indicator: 1.609 ms
+Stability window:     0.15s
+Baseline RTT:         7.258 ms
+Post-recovery RTT:    6.981 ms
+Post-recovery jitter: 0.771 ms
+Post-recovery p95:    8.466 ms
+RTT inflation:        0.962x
+Window avg RTT:       8.155 ms
+Window phase2 RTT:    8.427 ms
+Prop shift indicator: 0.639 ms
+Queue tail indicator: 2.228 ms
 Path changed:         False
 Path changed in win:  False
