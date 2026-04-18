@@ -1,6 +1,6 @@
 # CS6204-Project
 
-Course project for CS6204: Advanced Topics in Networking.
+Course project for CS6204: Advanced Topics in Networking. The code is based on the setup from Course Assignment 2. All commands in this project are run relative to the "base" folder. Everything was tested within the p4-ubuntu image provided in the course. Please install matplotlib if you want to run the plotting utils.
 
 ## Overview
 
@@ -21,6 +21,10 @@ Current experiment goals:
 
 ## Topology
 
+### Tasks 1 and 2 Topology
+
+Tasks 1 and 2 use the same physical and policy setup:
+
 - `as1r1`, `as2r1`, `as3r1` share subnet `10.0.0.0/24` through `ixp1s1`
 - `as4r1` connects to:
   - `as2r1` via `10.0.1.0/24`
@@ -28,6 +32,14 @@ Current experiment goals:
 - the `AS2-AS4` link is configured faster than the `AS3-AS4` link
 - BGP policy prefers `AS2` for `AS1 -> AS4`
 - BGP policy prefers `AS3` for `AS4 -> AS1`
+
+![Task 1 and 2 Topology](assets/topo1&2.png)
+
+### Tasks 3 and 4 Topology
+
+Tasks 3 and 4 use a shared topology variant intended for the later experiment stages. 
+
+![Task 3 and 4 Topology](assets/topo3&4.png)
 
 ## Setup
 
