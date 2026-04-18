@@ -59,6 +59,13 @@ pip install matplotlib numpy
 
 ## Task Instructions (All 4 Tasks)
 
+### Task Descriptions
+
+- **Task 1:** Baseline single-switch SDX experiment (`ixp1s1`) with one failure event (`as2r1-eth1`) and single-direction recovery comparison (`AS1 -> AS4`).
+- **Task 2:** Same topology as Task 1, but with bidirectional convergence evaluation (`AS1 -> AS4` and `AS4 -> AS1`) and richer packet-loss/RTT reporting.
+- **Task 3:** Extended topology with two SDX switches (`ixp1s1` and `ixp2s1`) and two controllers, measuring recovery in both directions under the staged topology.
+- **Task 4:** Full two-switch scenario with stronger failure injection (both `as2r1-eth1` and `as2r1-eth2`), plus optional multi-trial runs and deeper post-recovery analytics.
+
 Each task has build + interactive run targets:
 
 ```bash
@@ -119,7 +126,7 @@ Tasks 2/3/4 compare use `compare_recovery_results_2_way.py` (forward + reverse s
 
 ## Graph Generation Scripts
 
-There are two plotting scripts:
+The uploaded results directory contains the reuslts for task4 and is the most comprehensive set of results. Feel free to rerun and of the setups and use the relevant graph scripts. There are two plotting scripts:
 
 ### 1) Quick graph set
 
@@ -143,7 +150,7 @@ Run:
 python generate_recovery_graphs.py
 ```
 
-### 2) Extended analysis graph set
+### 2) Extended analysis graph set (Only Task 4)
 
 Script: `base/plot_recovery_experiments.py`
 
