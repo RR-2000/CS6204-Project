@@ -1,5 +1,7 @@
 # Recovery Report
 
+This file is an obsolete report from the inital tests on Task 1.
+
 ## Goal
 
 This experiment evaluates two recovery methods after the link between `AS2` and the shared exchange switch fails:

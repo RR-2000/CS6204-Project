@@ -187,4 +187,3 @@ Typical outputs in `results/recovery_plots*/`:
 - failure injection is performed by shutting down `as2r1-eth1`
 - the P4 controller preinstalls static forwarding entries for router MAC addresses on the shared switch
 - the SDX fast recovery rule rewrites packets from `AS1` that would have gone to `AS2`, and forwards them to the `AS3` switch port instead
-- detailed failure analysis is documented in [BGP_RECOVERY_REPORT.md](/C:/Myself/work/Course/CS6204/VM_share/CS6204-Project/base/BGP_RECOVERY_REPORT.md)
